@@ -1,0 +1,71 @@
+{
+    "state": 200,
+    "data": {
+        "userInfo": {
+            "name": "神奇女侠",
+            "headImage": "http://192.168.199.248:2001/pic/photo.jpg"
+        },
+        "report": {
+            "pageIndex": "1",
+            "pageSize": "3",
+            "pageTotal": "10",
+            "list": [
+                {
+                    "decs": "该河段漂浮物已清理干净，水面清澈。该河段漂浮物已清理干净，水面清澈。",
+                    "date": 1513665021,
+                    "album": [
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg"
+                    ],
+                    "location": "大埔浈江河段",
+                    "state": "process"
+                },
+                {
+                    "decs": "该河段漂浮物已清理干净，水面清澈。该河段漂浮物已清理干净，水面清澈。",
+                    "date": 1513665021,
+                    "album": [
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg"
+                    ],
+                    "location": "大埔浈江河段",
+                    "state": "process"
+                },
+                {
+                    "decs": "该河段漂浮物已清理干净，水面清澈。该河段漂浮物已清理干净，水面清澈。",
+                    "date": 1513665021,
+                    "album": [
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg"
+                    ],
+                    "location": "大埔浈江河段",
+                    "state": "process"
+                },
+                {
+                    "decs": "该河段漂浮物已清理干净，水面清澈。该河段漂浮物已清理干净，水面清澈。",
+                    "date": 1513665021,
+                    "album": [
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg"
+                    ],
+                    "location": "大埔浈江河段",
+                    "state": "done"
+                },
+                {
+                    "decs": "该河段漂浮物已清理干净，水面清澈。该河段漂浮物已清理干净，水面清澈。",
+                    "date": 1513665021,
+                    "album": [
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg",
+                        "http://192.168.199.248:2001/pic/report-img.jpg"
+                    ],
+                    "location": "大埔浈江河段",
+                    "state": "done"
+                }
+            ]
+        }
+    }
+}
