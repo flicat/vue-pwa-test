@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router);
 
-let router = new Router({
+export default new Router({
     routes: [
         {
             path: '/',
@@ -53,14 +53,15 @@ let router = new Router({
                 title: '详细信息'
             },
             component: () => import('@/components/articleDetail')
+        },
+        {
+            path: '/report-list',
+            name: 'reportList',
+            props: true,
+            meta: {
+                title: '曝光台'
+            },
+            component: () => import('@/components/reportList')
         }
     ]
 });
-
-// 设置页面标题
-router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title}`;
-    next();
-});
-
-export default router;

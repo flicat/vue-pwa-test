@@ -7,7 +7,7 @@
         <section class="flex">
             <div class="flex-content" ref="wrap">
                 <ul class="news-list" v-if="list && list.length">
-                    <li class="news-item" v-for="item in list">
+                    <li class="news-item" v-for="item in list" :key="item.id">
                         <router-link :to="'/article-detail/' + item.id">
                             <img :src="item.album" alt="" class="photo">
                             <p class="title text-clip">{{item.title}}</p>
@@ -16,6 +16,8 @@
                         </router-link>
                     </li>
                 </ul>
+                <div class="box" v-else-if="ready"><span>暂无数据</span></div>
+                <full-loading v-else></full-loading>
             </div>
         </section>
         <loading @load="getData" :wrap="$refs.wrap"></loading>
@@ -25,6 +27,7 @@
 
 <script>
     import Loading from '@/widget/loading';
+    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
 
     // 获取数据
@@ -41,6 +44,9 @@
 
             let res = await fetch(url);
             let data = await res.json();
+
+            // 数据已经加载完成
+            this.ready = true;
 
             callback && callback();
 
@@ -66,11 +72,13 @@
         name: 'articleList',
         components: {
             'loading': Loading,
-            'go-top': goTop,
+            'full-loading': FullLoading,               // loading遮罩
+            'go-top': goTop
         },
         created: getData,
         data () {
             return {
+                ready: false,                   // 是否加载完成
                 list: null,
 
                 pageIndex: 0,

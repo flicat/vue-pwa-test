@@ -7,17 +7,21 @@
             </header>
             <article v-html="data.content"></article>
         </template>
+        <div class="box" v-else-if="ready"><span>暂无数据</span></div>
+        <full-loading v-else></full-loading>
         <go-top :wrap="$refs.wrap"></go-top>
     </div>
 </template>
 
 <script>
     import goTop from '@/widget/goTop';
+    import FullLoading from '@/widget/full-loading';             // loading遮罩
 
     export default {
         name: 'articleList',
         props: ['id'],
         components: {
+            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
         created: async function () {
@@ -28,12 +32,16 @@
             let res = await fetch(url);
             let data = await res.json();
 
+            // 数据已经加载完成
+            this.ready = true;
+
             if(data.state === 200) {
                 this.data= data.data;
             }
         },
         data () {
             return {
+                ready: false,                   // 是否加载完成
                 data: null
             };
         },

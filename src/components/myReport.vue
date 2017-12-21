@@ -3,7 +3,7 @@
         <section class="flex">
             <article class="flex-content" ref="wrap">
                 <ul class="report-list" v-if="userInfo && list && list.length">
-                    <li class="report-item" v-for="item in list">
+                    <li class="report-item" v-for="item in list" :key="item.id">
                         <img class="user-photo" :src="userInfo.headImage" />
                         <p class="user-name">{{userInfo.name}}</p>
                         <p class="decs">{{item.decs}}</p>
@@ -15,6 +15,8 @@
                         <i class="state" :class="{active: item.state==='process', done: item.state==='done'}"></i>
                     </li>
                 </ul>
+                <div class="box" v-else-if="ready"><span>暂无数据</span></div>
+                <full-loading v-else></full-loading>
             </article>
         </section>
         <loading @load="getData" :wrap="$refs.wrap"></loading>
@@ -24,6 +26,7 @@
 
 <script>
     import Loading from '@/widget/loading';
+    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
 
     // 获取数据
@@ -42,6 +45,9 @@
 
             let res = await fetch(url);
             let data = await res.json();
+
+            // 数据已经加载完成
+            this.ready = true;
 
             callback && callback();
 
@@ -69,11 +75,13 @@
         name: 'myReport',
         components: {
             'loading': Loading,
-            'go-top': goTop,
+            'full-loading': FullLoading,               // loading遮罩
+            'go-top': goTop
         },
         created: getData,
         data () {
             return {
+                ready: false,                   // 是否加载完成
                 userInfo: null,
                 list: null,
 
@@ -94,7 +102,7 @@
 
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
     @import "../assets/css/base.less";
 
     .report-list {

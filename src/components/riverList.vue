@@ -120,11 +120,13 @@
 
 <script>
     import Loading from '@/widget/loading';
+    import FullLoading from '@/widget/full-loading';
 
     export default {
         name: 'mapInfo',
         components: {
-            'loading': Loading
+            'loading': Loading,
+            'full-loading': FullLoading
         },
         data: function() {
             return {

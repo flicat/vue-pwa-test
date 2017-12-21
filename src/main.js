@@ -6,10 +6,27 @@ import router from './router'
 
 Vue.config.productionTip = false;
 
+
 /* eslint-disable no-new */
-new Vue({
+let VM = new Vue({
     el: '#app',
     router,
-    template: '<App/>',
+    data: {
+        showLoading: false
+    },
+    template: '<App :loading="showLoading"/>',
     components: {App}
 });
+
+// 设置页面标题
+router.beforeEach((to, from, next) => {
+    document.title = `${to.meta.title}`;
+    VM.showLoading = true;
+    next();
+});
+
+router.afterEach ((to, from) => {
+    VM.showLoading = false;
+});
+
+

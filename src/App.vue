@@ -1,12 +1,19 @@
 <template>
     <div id="app" class="wrap">
         <router-view/>
+        <full-loading v-show="loading"></full-loading>
     </div>
 </template>
 
 <script>
+    import FullLoading from '@/widget/full-loading';
+
     export default {
-        name: 'app'
+        name: 'app',
+        components: {
+            'full-loading': FullLoading
+        },
+        props: ['loading']
     }
 </script>
 
