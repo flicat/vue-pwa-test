@@ -57,11 +57,19 @@ export default new Router({
         {
             path: '/report-list',
             name: 'reportList',
-            props: true,
             meta: {
                 title: '曝光台'
             },
             component: () => import('@/components/reportList')
+        },
+        {
+            path: '/report-info/:id',
+            name: 'reportInfo',
+            props: true,
+            meta: {
+                title: '爆料详情'
+            },
+            component: () => import('@/components/reportInfo')
         }
     ]
 });

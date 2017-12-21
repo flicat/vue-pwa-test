@@ -2,16 +2,16 @@
     <div class="box">
         <section class="flex">
             <article class="flex-content" ref="wrap">
-                <ul class="report-list" v-if="userInfo && list && list.length">
+                <ul class="report-list" v-if="list && list.length">
                     <li class="report-item" v-for="item in list" :key="item.id">
-                        <img class="user-photo" :src="userInfo.headImage" />
-                        <p class="user-name">{{userInfo.name}}</p>
-                        <p class="decs">{{item.decs}}</p>
-                        <p class="album clear" v-if="item.album && item.album.length">
-                            <img v-for="src in item.album" :src="src" alt="">
-                        </p>
-                        <p class="location">位置：{{item.location}}</p>
+                        <router-link :to="'/report-info/' + item.id">
+                            <p class="decs">{{item.decs}}</p>
+                            <p class="album clear" v-if="item.album && item.album.length">
+                                <img v-for="src in item.album" :src="src" alt="">
+                            </p>
+                        </router-link>
                         <p class="date">{{getDate(item.date)}}</p>
+                        <p class="location">位置：{{item.location}}</p>
                         <i class="state" :class="{active: item.state==='process', done: item.state==='done'}"></i>
                     </li>
                 </ul>
@@ -28,6 +28,7 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
+    import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
 
     // 获取数据
     async function getData (callback) {
@@ -39,9 +40,6 @@
             url.search = [
                 ['pageIndex', this.pageIndex].join('='),
                 ['pageIndex', this.pageIndex].join('=')].join('&');
-
-            url.searchParams.append('pageIndex', this.pageIndex);
-            url.searchParams.append('pageSize', this.pageSize);
 
             let res = await fetch(url);
             let data = await res.json();
@@ -95,7 +93,7 @@
             getData,
             getDate (str) {
                 let date = new Date(Number(str) * 1000);
-                return [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('-');
+                return getTimeStr(date);
             }
         }
     };
@@ -110,29 +108,19 @@
 
         .report-item {
             position: relative;
-            padding: (30 / @rem) (105 / @rem) (30 / @rem) (92 / @rem);
+            padding: (30 / @rem) (105 / @rem) (30 / @rem) (15 / @rem);
             border-bottom: 1px solid #e5e5e7;
 
             &:last-child {
                 border-bottom: 0 none;
             }
 
-            .user-photo {
-                position: absolute;
-                left: 0;
-                top: (30 / @rem);
-                display: block;
-                width: (72 / @rem);
-                height: (72 / @rem);
-                vertical-align: top;
+            a {
+                text-decoration: none;
             }
-
             p {
                 line-height: 1.3em;
-            }
-            .user-name {
-                font-size: (34 / @rem);
-                color: #3f5a6e;
+                word-break: break-all;
             }
             .decs {
                 font-size: (28 / @rem);

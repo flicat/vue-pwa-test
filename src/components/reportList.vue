@@ -4,12 +4,14 @@
             <article class="flex-content" ref="wrap">
                 <ul class="report-list" v-if="list && list.length">
                     <li class="report-item" v-for="item in list" :key="item.id">
-                        <img class="user-photo" :src="item.userInfo.headImage" />
-                        <p class="user-name">{{item.userInfo.name}}</p>
-                        <p class="decs">{{item.decs}}</p>
-                        <p class="album clear" v-if="item.album && item.album.length">
-                            <img v-for="src in item.album" :src="src" alt="">
-                        </p>
+                        <router-link :to="'/report-info/' + item.id">
+                            <img class="user-photo" :src="item.userInfo.headImage" />
+                            <p class="user-name">{{item.userInfo.name}}</p>
+                            <p class="decs">{{item.decs}}</p>
+                            <p class="album clear" v-if="item.album && item.album.length">
+                                <img v-for="src in item.album" :src="src" alt="">
+                            </p>
+                        </router-link>
                         <div class="location-action clear">
                             <p class="location pull-left">位置：{{item.location}}</p>
 
@@ -27,9 +29,9 @@
                             <div class="likes clear" v-if="item.likes && item.likes.length">
                                 <i class="icon icon-like pull-left"></i>
                                 <span class="like pull-left" v-for="(like, i) in item.likes">
-                                    {{like}}
-                                    {{i === item.likes.length - 1 ? '' : ','}}
-                                </span>
+                                        {{like}}
+                                        {{i === item.likes.length - 1 ? '' : ','}}
+                                    </span>
                             </div>
                             <ul class="comments" v-if="item.comment && item.comment.length">
                                 <li class="comment-item" v-for="comment in item.comment">
@@ -72,9 +74,6 @@
             url.search = [
                 ['pageIndex', this.pageIndex].join('='),
                 ['pageIndex', this.pageIndex].join('=')].join('&');
-
-            url.searchParams.append('pageIndex', this.pageIndex);
-            url.searchParams.append('pageSize', this.pageSize);
 
             let res = await fetch(url);
             let data = await res.json();
@@ -152,6 +151,9 @@
                 border-bottom: 0 none;
             }
 
+            a {
+                text-decoration: none;
+            }
             .user-photo {
                 position: absolute;
                 left: 0;
@@ -164,6 +166,7 @@
 
             p {
                 line-height: 1.3em;
+                word-break: break-all;
             }
             .user-name {
                 font-size: (34 / @rem);

@@ -4,7 +4,7 @@
  * @description 获取时间字符串
  */
 
-export default function (date) {
+export default function (date, format) {
     if(!(date instanceof Date)) {
         date = new Date(date);
     }
@@ -14,6 +14,7 @@ export default function (date) {
     let now = new Date();
     let now_year = now.getFullYear();
 
+    let time_stamp = date.getTime();
     let year = date.getFullYear();
     let week = date.getDay();
     let hour = date.getHours();
@@ -32,8 +33,15 @@ export default function (date) {
     let time_str = hour + ':' + min;
     let diff_day = Math.floor((now - date ) / 86400000);
 
+
     if (diff_day === 0) {
-        return time_str;
+        if(Date.now() - time_stamp < 3600000) {
+            return Math.floor((Date.now() - time_stamp) / 60000) + '分钟前';
+        } else if(Date.now() - time_stamp < 86400000) {
+            return Math.floor((Date.now() - time_stamp) / 3600000) + '小时前';
+        } else {
+            return time_str;
+        }
     } else if (diff_day === 1) {
         return '昨天 ' + time_str;
     } else if (diff_day < 7 && week > 0 &&  week < now.getDay()) {

@@ -20,12 +20,12 @@ let VM = new Vue({
 
 // 设置页面标题
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title}`;
     VM.showLoading = true;
     next();
 });
 
 router.afterEach ((to, from) => {
+    document.title = `${to.meta.title}`;
     VM.showLoading = false;
 });
 
