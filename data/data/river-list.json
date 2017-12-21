@@ -1,0 +1,21 @@
+{
+    "state": 200,
+    "data": {
+        "pageIndex": "1",
+        "pageSize": "10",
+        "pageTotal": "5",
+        "list": [
+            {
+                "id": "100001",
+                "name": "浈江大埔区段",
+                "area": "大埔县",
+                "length": "3.5Km",
+                "decs": "无污染河涌",
+                "from": "石厘头",
+                "end": "南岗河",
+                "thumb": "http://192.168.199.248:2001/pic/list.jpg",
+                "follow": 1
+            }
+        ]
+    }
+}

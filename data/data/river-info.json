@@ -1,0 +1,32 @@
+{
+    "state": 200,
+    "data": {
+        "id": "100001",
+        "name": "浈江大埔区段",
+        "location": "112.865569,23.951898",
+        "topRiverer": {
+            "name": "郑晓燕",
+            "title": "区书记"
+        },
+        "viceRiverer": {
+            "name": "张仁建",
+            "title": "区长"
+        },
+        "riverer": {
+            "name": "张仁建",
+            "title": "区长"
+        },
+        "cityLevel": "广州市",
+        "countyLevel": "大埔县",
+        "from": "石厘头",
+        "end": "南岗河",
+        "land": "右岸",
+        "collectingArea": "2565.468km²",
+        "length": "3.5Km",
+        "system": "北江",
+        "remarks": "无污染河涌",
+        "townId": "154451",
+        "villageId": "35461351",
+        "supRiverId": "68768435"
+    }
+}

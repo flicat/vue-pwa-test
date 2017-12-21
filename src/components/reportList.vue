@@ -129,7 +129,6 @@
         methods: {
             getData,                          // 加载数据
             getDate (str) {
-                // 获取时间字符串
                 let date = new Date(str * 1000);
                 return getTimeStr(date);
             }
