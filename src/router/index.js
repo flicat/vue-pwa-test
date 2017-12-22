@@ -38,10 +38,18 @@ export default new Router({
             component: () => import('@/components/myReport')
         },
         {
-            path: '/article-list',
+            path: '/article-list/:id',
             name: 'articleList',
+            props: true,
             meta: {
-                title: '列表信息'
+                title: {
+                    '1': '河道信息',
+                    '2': '河长信息',
+                    '3': '河长责任',
+                    '4': '通知公告',
+                    '5': '工作动态',
+                    '6': '治理成效'
+                }
             },
             component: () => import('@/components/articleList')
         },

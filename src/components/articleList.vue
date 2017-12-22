@@ -1,18 +1,18 @@
 <template>
     <div class="wrap box">
         <header>
-            <h1>列表信息</h1>
+            <h1>{{title}}</h1>
             <a href="javascript:;" class="btn-menu"></a>
         </header>
         <section class="flex">
             <div class="flex-content" ref="wrap">
                 <ul class="news-list" v-if="list && list.length">
-                    <li class="news-item" v-for="item in list" :key="item.id">
+                    <li class="news-item" v-for="item in list" :key="item.id" :class="{'no-pic': !item.album}">
                         <router-link :to="'/article-detail/' + item.id">
-                            <img :src="item.album" alt="" class="photo">
-                            <p class="title text-clip">{{item.title}}</p>
-                            <p class="decs text-clip-2">{{item.decs}}</p>
-                            <p class="time text-clip">{{getDate(item.date)}}</p>
+                            <img :src="item.album" v-if="item.album" alt="" class="photo">
+                            <p v-if="item.title" class="title text-clip">{{item.title}}</p>
+                            <p v-if="item.decs" class="decs text-clip-2">{{item.decs}}</p>
+                            <p v-if="item.date" class="time text-clip">{{getDate(item.date)}}</p>
                         </router-link>
                     </li>
                 </ul>
@@ -70,6 +70,7 @@
 
     export default {
         name: 'articleList',
+        props: ['id'],
         components: {
             'loading': Loading,
             'full-loading': FullLoading,               // loading遮罩
@@ -86,7 +87,18 @@
                 pageTotal: null
             };
         },
-
+        computed: {
+            title () {
+                return ({
+                    '1': '河道信息',
+                    '2': '河长信息',
+                    '3': '河长责任',
+                    '4': '通知公告',
+                    '5': '工作动态',
+                    '6': '治理成效'
+                })[this.id]
+            }
+        },
         methods: {
             getData,
             getDate (str) {
@@ -138,6 +150,10 @@
             display: block;
             padding: (30 / @rem) 0 (30 / @rem) (280 / @rem);
             border-bottom: 1px solid #e5e5e7;
+
+            &.no-pic {
+                padding-left: 0;
+            }
 
             &:last-child {
                 border-bottom: 0 none;

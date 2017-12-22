@@ -3,16 +3,17 @@
         <section class="flex">
             <el-amap
                 ref="map"
-                vid="amapDemo"
                 :amap-manager="amapManager"
                 :center="center"
                 :zoom="zoom"
                 :plugin="plugin"
                 :events="events"
-                class="flex-content"></el-amap>
+                class="flex-content">
+                <el-amap-marker v-for="marker in markers" :position="marker.position" :content="marker.content" :events="marker.events"></el-amap-marker>
+            </el-amap>
         </section>
 
-        <router-link to="/">
+        <router-link to="/report-list">
             <span class="icon-outlet">
                 <i class="icon icon-location"></i>
                 <em>排污口</em>
@@ -37,22 +38,51 @@
 
     let amapManager = new AMap.AMapManager();
 
+    // 获取坐标点
+    async function getData (vm, param) {
+        let markers = [];
+
+        let url = new URL('http://192.168.199.248:2001/data/report-point.json');
+
+        url.search = [
+            ['location', param.location].join('='),
+            ['range', param.range].join('=')
+        ].join('&');
+
+        let res = await fetch(url);
+        let data = await res.json();
+
+        if(data.state === 200 && data.data && data.data.length) {
+
+            data.data.forEach(item => markers.push({
+                position: item.location.split(','),
+                content: '<button type="button" class="btn-map-report">坐标点</button>',
+                events: {
+                    click () {
+                        vm.$router.push({ path: `/report-info/${item.reportId}`})
+                    }
+                }
+            }));
+        }
+
+        vm.markers = markers;
+    }
+
+
     export default {
         name: 'mapInfo',
 
         data: function() {
 
             return {
+                markers: [],
+
                 amapManager,
                 zoom: 12,
                 center: [112.865569,23.951898],
                 events: {
                     init: (o) => {
-                        console.log(o.getCenter());
-//                        console.log(this.$refs.map.$$getInstance());
-//                        o.getCity(result => {
-//                            console.log(result)
-//                        });
+
                     },
                     'moveend': (e) => {
                         console.log(e)
@@ -72,7 +102,7 @@
                         liteStyle: true,
                         events: {
                             init(instance) {
-                                console.log(instance);
+//                                console.log(instance);
                             }
                         }
                     }
@@ -80,10 +110,18 @@
             };
         },
 
+        created () {
+            getData(this, {
+                location: this.center.join(','),
+                range: 1000
+            });
+        },
+
         methods: {
-            getMap() {
+            handler(id) {
+                console.log(id);
                 // amap vue component
-                console.log(amapManager._componentMap);
+//                console.log(amapManager._componentMap);
                 // gaode map instance
 //                console.log(amapManager._map);
             }
@@ -124,5 +162,12 @@
             font-size: (20 / @rem);
             color: #333;
         }
+    }
+
+</style>
+<style>
+    .btn-map-report {
+        position: relative;
+        z-index: 99999;
     }
 </style>
