@@ -14,7 +14,7 @@
                             <span class="label end">终点：{{river.end}}</span>
                         </div>
                     </router-link>
-                    <a href="javascript:;" class="btn-follow text-hide" :class="{active: river.follow===1}">关注</a>
+                    <a href="javascript:;" class="btn-follow text-hide" @click="follow(river)" :class="{active: river.follow===1}">关注</a>
                 </li>
             </ul>
             <div class="box" v-else-if="ready"><span>暂无数据</span></div>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
@@ -103,7 +104,24 @@
             };
         },
         methods: {
-            getData
+            getData,
+            // 点击收藏
+            async follow (river) {
+                let follow = !(river.follow - 0) - 0;
+                let url = new URL('http://192.168.199.248:2001/data/follow-result.json');
+
+                url.search = [
+                    ['follow', follow].join('='),
+                    ['id', river.id].join('=')
+                ].join('&');
+
+                let res = await fetch(url);
+                let data = await res.json();
+
+                if(data.state === 200) {
+                    Vue.set(river, 'follow', follow);
+                }
+            }
         }
     };
 </script>
