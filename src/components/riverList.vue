@@ -115,16 +115,17 @@
         },
         created: getArea,     // 获取地区联动菜单
         data () {
+
             return {
                 area: null,                    // 地区联动菜单-镇
                 subArea: null,                 // 地区联动菜单-村
                 tabType: 'all',
 
-                showSearch: false,              // 搜索框显隐控制字段
-                searchParam: {                 // 搜索字段
-                    name: '',                // 河流名称
-                    town: '',                // 所属镇
-                    village: ''              // 所属村
+                showSearch: false,                              // 搜索框显隐控制字段
+                searchParam: {                                  // 搜索字段
+                    name: '',                                   // 河流名称
+                    town: this.$route.query.town || '',         // 所属镇
+                    village: this.$route.query.village || ''    // 所属村
                 }
             };
         },
