@@ -32,14 +32,13 @@
 
     // 获取数据
     async function getData (callback) {
-        this.pageIndex++;
 
-        if(!this.pageTotal || this.pageIndex < this.pageTotal) {
+        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
             let url = new URL('http://192.168.199.248:2001/data/my-report.json');
             url.search = [
-                ['pageIndex', this.pageIndex].join('='),
-                ['pageIndex', this.pageIndex].join('=')].join('&');
+                ['pageIndex', this.pageIndex++].join('='),
+                ['pageSize', this.pageSize].join('=')].join('&');
 
             let res = await fetch(url);
             let data = await res.json();
@@ -83,7 +82,7 @@
                 userInfo: null,
                 list: null,
 
-                pageIndex: 0,
+                pageIndex: 1,
                 pageSize: 10,
                 pageTotal: null
             };

@@ -66,14 +66,13 @@
 
     // 获取列表数据
     async function getData (callback) {
-        this.pageIndex++;                       // 翻页
 
-        if(!this.pageTotal || this.pageIndex < this.pageTotal) {
+        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
             let url = new URL('http://192.168.199.248:2001/data/report-list.json');
             url.search = [
-                ['pageIndex', this.pageIndex].join('='),
-                ['pageIndex', this.pageIndex].join('=')].join('&');
+                ['pageIndex', this.pageIndex++].join('='),
+                ['pageSize', this.pageSize].join('=')].join('&');
 
             let res = await fetch(url);
             let data = await res.json();
@@ -119,7 +118,7 @@
                 ready: false,                   // 是否加载完成
                 list: null,                     // 数据列表
 
-                pageIndex: 0,                  // 当前页
+                pageIndex: 1,                  // 当前页
                 pageSize: 10,                  // 每页数量
                 pageTotal: null                // 总页数
             };

@@ -152,7 +152,7 @@
             display: block;
             width: (45 / @rem);
             height: (59 / @rem);
-            background: url(../assets/images/icon-location.png) no-repeat 0 0;
+            background: url(../assets/images/icon-point.png) no-repeat 0 0;
             background-size: 100% 100%;
             margin: (15 / @rem) auto 0;
         }

@@ -30,12 +30,45 @@ export default new Router({
             component: () => import('@/components/riverList')
         },
         {
+            path: '/river-info/:id',
+            name: 'riverInfo',
+            props: true,
+            meta: {
+                title: '河湖详情'
+            },
+            component: () => import('@/components/riverInfo')
+        },
+        {
+            path: '/riverer-list',
+            name: 'rivererList',
+            meta: {
+                title: '河长信息'
+            },
+            component: () => import('@/components/rivererList')
+        },
+        {
+            path: '/riverer-info',
+            name: 'rivererInfo',
+            meta: {
+                title: '河长信息'
+            },
+            component: () => import('@/components/rivererInfo')
+        },
+        {
             path: '/my-report',
             name: 'myReport',
             meta: {
                 title: '我的爆料'
             },
             component: () => import('@/components/myReport')
+        },
+        {
+            path: '/report',
+            name: 'report',
+            meta: {
+                title: '我要爆料'
+            },
+            component: () => import('@/components/report')
         },
         {
             path: '/article-list/:id',
