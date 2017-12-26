@@ -14,33 +14,44 @@
         }
     };
 
+    let scrollHandler;
+
     export default {
         name: 'goTop',
         props: ['wrap'],          // wrap 列表滚动节点
         data () {
             return {
+                _wrap: null,
                 show: false
             }
         },
         mounted () {
             let that = this;
             let body = document.body;
+            that._wrap = that.wrap();
+
+            scrollHandler = function (e) {
+                that.show = this.scrollTop > 0;
+            };
 
             let handler = function () {
-                if(that.wrap) {
-                    that.wrap.addEventListener('scroll', function (e) {
-                        that.show = this.scrollTop > 0;
-                    }, false);
+                if(that._wrap) {
+                    that._wrap.addEventListener('scroll', scrollHandler, false);
                     body.removeEventListener('touchstart', handler);
                 }
             };
             body.addEventListener('touchstart', handler, false);
         },
+        destroyed () {
+            if(this._wrap) {
+                this._wrap.removeEventListener('scroll', scrollHandler);
+            }
+        },
         methods: {
             goTop () {
                 // 点击返回到顶部
-                if(this.wrap) {
-                    scrollToTop(this.wrap);
+                if(this._wrap) {
+                    scrollToTop(this._wrap);
                     this.show = false;
                 }
             }

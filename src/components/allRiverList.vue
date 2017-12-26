@@ -21,8 +21,8 @@
             <full-loading v-else></full-loading>
         </article>
 
-        <loading @load="getData" :wrap="$refs.wrap"></loading>
-        <go-top :wrap="$refs.wrap"></go-top>
+        <loading @load="getData" :wrap="getWrap"></loading>
+        <go-top :wrap="getWrap"></go-top>
     </section>
 </template>
 
@@ -121,6 +121,9 @@
                 if(data.state === 200) {
                     Vue.set(river, 'follow', follow);
                 }
+            },
+            getWrap () {
+                return this.$refs.wrap;
             }
         }
     };

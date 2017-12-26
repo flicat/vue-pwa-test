@@ -53,8 +53,8 @@
                 <full-loading v-else></full-loading>
             </article>
         </section>
-        <loading @load="getData" :wrap="$refs.wrap"></loading>
-        <go-top :wrap="$refs.wrap"></go-top>
+        <loading @load="getData" :wrap="getWrap"></loading>
+        <go-top :wrap="getWrap"></go-top>
     </div>
 </template>
 
@@ -129,6 +129,9 @@
             getDate (str) {
                 let date = new Date(str * 1000);
                 return getTimeStr(date);
+            },
+            getWrap () {
+                return this.$refs.wrap;
             }
         }
     };

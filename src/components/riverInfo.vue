@@ -130,7 +130,7 @@
             </div>
         </div>
 
-        <go-top :wrap="$refs.wrap"></go-top>
+        <go-top :wrap="getWrap"></go-top>
 
     </div>
 </template>
@@ -244,6 +244,9 @@
             // 村级
             villageLevel() {
                 this.$router.push({name: 'riverList', query: {town: this.data.townId}});
+            },
+            getWrap () {
+                return this.$refs.wrap;
             }
 
         }

@@ -27,7 +27,7 @@
 |data.list | Array | 河长列表 | 无 |
 |data.list[].id |Number| 河长ID | 无 |
 |data.list[].name |String| 河长姓名| 无 |
-|data.list[].sex |String| 河长性别 | 无 |
+|data.list[].sex |String| 河长性别 | male：男，female：女 |
 |data.list[].title |String| 河长职务 | 无 |
 |data.list[].address |String| 住址 | 无 |
 |data.list[].tel |String| 办公电话 | 无 |

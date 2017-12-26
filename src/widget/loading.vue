@@ -6,6 +6,9 @@
 </template>
 
 <script>
+    let scrollHandler;
+    let body = document.body;
+
     export default {
         name: 'loading',
         props: ['wrap'],          // wrap 列表滚动节点
@@ -17,16 +20,15 @@
 
             if (loading) {
 
-                let body = document.body;
                 let scrollAble = false,   // 拖放滚动控制字段
                     loadAble = false;     // 加载事件控制字段
                 let startY = 0,           // 开始Y坐标
                     diffY = 0,            // 移动Y坐标值
                     scrollHeight = loading.scrollHeight;     // loading节点高度
 
-                function scrollHandler(e) {
+                let wrap = that.wrap();
 
-                    let wrap = that.wrap;
+                scrollHandler = function (e) {
 
                     if (wrap) {
                         // 触摸节点
@@ -43,7 +45,6 @@
                             case 'touchmove':
                                 if (scrollAble) {
                                     diffY = (touches.clientY - startY) / 5;
-
                                     if (diffY < 0) {
 
                                         // 拖放的高度不能超过loading节点
@@ -88,7 +89,7 @@
                                 break;
                         }
                     }
-                }
+                };
 
                 body.addEventListener('touchstart', scrollHandler, false);
                 body.addEventListener('touchmove', scrollHandler, false);
@@ -96,6 +97,13 @@
                 body.addEventListener('touchcancel', scrollHandler, false);
 
             }
+        },
+        destroyed() {
+            body.removeEventListener('touchstart', scrollHandler, false);
+            body.removeEventListener('touchmove', scrollHandler, false);
+            body.removeEventListener('touchend', scrollHandler, false);
+            body.removeEventListener('touchcancel', scrollHandler, false);
+            scrollHandler = null;
         }
     }
 </script>

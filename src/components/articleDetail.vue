@@ -9,7 +9,7 @@
         </template>
         <div class="box" v-else-if="ready"><span>暂无数据</span></div>
         <full-loading v-else></full-loading>
-        <go-top :wrap="$refs.wrap"></go-top>
+        <go-top :wrap="getWrap"></go-top>
     </div>
 </template>
 
@@ -50,6 +50,9 @@
             getDate (str) {
                 let date = new Date(Number(str) * 1000);
                 return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
+            },
+            getWrap () {
+                return this.$refs.wrap;
             }
         }
     };

@@ -30,7 +30,7 @@
                 <full-loading v-else></full-loading>
             </article>
         </section>
-        <go-top :wrap="$refs.wrap"></go-top>
+        <go-top :wrap="getWrap"></go-top>
     </div>
 </template>
 
@@ -42,7 +42,11 @@
     // 获取列表数据
     async function getData () {
         let url = new URL('http://192.168.199.248:2001/data/report-info.json');
-        url.search = [['id', this.id].join('=')].join('&');
+//        let url = new URL('http://192.168.199.228:8083/weixinExposureInfoController.do?baoliaoDetail');
+        url.search = [
+//            'baoliaoDetail',
+            ['id', this.id].join('=')
+        ].join('&');
 
         let res = await fetch(url);
         let data = await res.json();
@@ -79,6 +83,9 @@
             getDate (str) {
                 let date = new Date(str * 1000);
                 return getTimeStr(date);
+            },
+            getWrap () {
+                return this.$refs.wrap;
             }
         }
     };
