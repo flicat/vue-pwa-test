@@ -32,7 +32,7 @@
 
     // 获取栏目列表
     async function getColumn () {
-        let url = new URL('http://192.168.199.248:2001/data/column-list.json');
+        let url = new URL('http://conf.free.ngrok.cc/cmsMenuController.do?cmsMenuList');
 
         let res = await fetch(url);
         let data = await res.json();

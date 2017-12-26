@@ -75,7 +75,7 @@ export default new Router({
             name: 'articleList',
             props: true,
             meta: {
-                title: ''
+                title: '文章列表'
             },
             component: () => import('@/components/articleList')
         },
