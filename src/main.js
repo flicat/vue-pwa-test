@@ -25,11 +25,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach ((to, from) => {
-    if(typeof to.meta.title === 'object') {
-        document.title = `${to.meta.title[to.params.id]}`;
-    } else {
-        document.title = `${to.meta.title}`;
-    }
+    document.title = `${to.meta.title}`;
     VM.showLoading = false;
 });
 

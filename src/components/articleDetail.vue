@@ -26,8 +26,12 @@
         },
         created: async function () {
             // 获取数据
-            let url = new URL('http://192.168.199.248:2001/data/article-detail.json');
-            url.search = 'id=' + this.id;
+            let url = new URL('http://conf.free.ngrok.cc/cmsArticleController.do');
+
+            url.search = [
+                'cmsArticleDetail',
+                ['articleId', this.id].join('=')
+            ].join('&');
 
             let res = await fetch(url);
             let data = await res.json();

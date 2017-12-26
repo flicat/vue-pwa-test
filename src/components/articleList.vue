@@ -30,13 +30,33 @@
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
 
-    // 获取数据
+    // 获取栏目列表
+    async function getColumn () {
+        let url = new URL('http://192.168.199.248:2001/data/column-list.json');
+
+        let res = await fetch(url);
+        let data = await res.json();
+
+        if(data && data.state === 200) {
+            let current = data.data.find(item => {
+                return item.id === this.id;
+            });
+            if(current) {
+                this.title = current.name;
+                document.title = current.name;
+            }
+        }
+    }
+
+    // 获取文章列表
     async function getData (callback) {
 
         if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
-            let url = new URL('http://192.168.199.248:2001/data/article-list.json');
+            let url = new URL('http://conf.free.ngrok.cc/cmsArticleController.do');
             url.search = [
+                'cmsArticleList',
+                ['columnId', this.id].join('='),
                 ['pageIndex', this.pageIndex++].join('='),
                 ['pageSize', this.pageSize].join('=')
             ].join('&');
@@ -76,28 +96,20 @@
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
-        created: getData,
+        created () {
+            getData.bind(this)();
+            getColumn.bind(this)();
+        },
         data () {
             return {
                 ready: false,                   // 是否加载完成
                 list: null,
+                title: null,
 
                 pageIndex: 1,
                 pageSize: 10,
                 pageTotal: null
             };
-        },
-        computed: {
-            title () {
-                return ({
-                    '1': '河道信息',
-                    '2': '河长信息',
-                    '3': '河长责任',
-                    '4': '通知公告',
-                    '5': '工作动态',
-                    '6': '治理成效'
-                })[this.id]
-            }
         },
         methods: {
             getData,

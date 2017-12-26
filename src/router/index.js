@@ -75,14 +75,7 @@ export default new Router({
             name: 'articleList',
             props: true,
             meta: {
-                title: {
-                    '1': '河道信息',
-                    '2': '河长信息',
-                    '3': '河长责任',
-                    '4': '通知公告',
-                    '5': '工作动态',
-                    '6': '治理成效'
-                }
+                title: ''
             },
             component: () => import('@/components/articleList')
         },
