@@ -122,7 +122,6 @@
                     :center="center"
                     :zoom="zoom"
                     :plugin="plugin"
-                    :events="events"
                     class="flex-content">
                     <el-amap-marker :position="marker.position" :content="marker.content"></el-amap-marker>
                 </el-amap>

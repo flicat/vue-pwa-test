@@ -12,6 +12,7 @@
     "data": "node data/app.js"
   },
   "dependencies": {
+    "browser-md5-file": "^1.0.0",
     "vue": "^2.5.2",
     "vue-amap": "^0.4.4",
     "vue-router": "^3.0.1",
