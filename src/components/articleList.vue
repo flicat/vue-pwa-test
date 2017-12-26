@@ -102,7 +102,7 @@
         methods: {
             getData,
             getDate (str) {
-                let date = new Date(Number(str) * 1000);
+                let date = new Date(Number(str));
                 return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
             },
             getWrap () {

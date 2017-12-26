@@ -127,7 +127,7 @@
         methods: {
             getData,                          // 加载数据
             getDate (str) {
-                let date = new Date(str * 1000);
+                let date = new Date(str);
                 return getTimeStr(date);
             },
             getWrap () {

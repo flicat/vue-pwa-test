@@ -91,7 +91,7 @@
         methods: {
             getData,
             getDate (str) {
-                let date = new Date(Number(str) * 1000);
+                let date = new Date(Number(str));
                 return getTimeStr(date);
             },
             getWrap () {

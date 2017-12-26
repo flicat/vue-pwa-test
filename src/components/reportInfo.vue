@@ -41,10 +41,9 @@
 
     // 获取列表数据
     async function getData () {
-        let url = new URL('http://192.168.199.248:2001/data/report-info.json');
-//        let url = new URL('http://192.168.199.228:8083/weixinExposureInfoController.do?baoliaoDetail');
+        let url = new URL('http://conf.free.ngrok.cc/weixinExposureInfoController.do');
         url.search = [
-//            'baoliaoDetail',
+            'baoliaoDetail',
             ['id', this.id].join('=')
         ].join('&');
 
@@ -81,7 +80,7 @@
 
         methods: {
             getDate (str) {
-                let date = new Date(str * 1000);
+                let date = new Date(str);
                 return getTimeStr(date);
             },
             getWrap () {
