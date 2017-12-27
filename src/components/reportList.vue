@@ -5,8 +5,8 @@
                 <ul class="report-list" v-if="list && list.length">
                     <li class="report-item" v-for="item in list" :key="item.id">
                         <router-link :to="'/report-info/' + item.id">
-                            <img class="user-photo" :src="item.userInfo.headImage" />
-                            <p class="user-name">{{item.userInfo.name}}</p>
+                            <img class="user-photo" :src="item.userInfo ? item.userInfo.headImage : '#'" />
+                            <p class="user-name">{{item.userInfo ? item.userInfo.name : ''}}</p>
                             <p class="decs">{{item.decs}}</p>
                             <p class="album clear" v-if="item.album && item.album.length">
                                 <img v-for="src in item.album" :src="src" alt="">

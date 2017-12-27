@@ -11,6 +11,8 @@
 
 <script>
     import router from '../router'
+    import config from '../config/fetch'
+    console.log(config);
 
     export default {
         name: 'index',

@@ -14,14 +14,6 @@ export default new Vuex.Store({
         ready: false,                   // 是否加载完成
         flood: null
     },
-    // mutations: {
-    //     ready (state, ready) {
-    //         state.ready = ready;
-    //     },
-    //     flood (state, flood) {
-    //         state.flood = flood;
-    //     }
-    // },
     actions: {
         init ({commit, dispatch, state}) {
             if(!state.ready) {

@@ -30,8 +30,10 @@ export default new Vuex.Store({
 
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
-                let url = new URL('http://192.168.199.248:2001/data/my-report.json');
+                let url = new URL('http://conf.free.ngrok.cc/weixinExposureInfoController.do');
                 url.search = [
+                    'baoliaoList',
+                    ['functionType', 1].join('='),
                     ['pageIndex', state.pageIndex++].join('='),
                     ['pageSize', state.pageSize].join('=')].join('&');
 

@@ -68,7 +68,7 @@ export default new Vuex.Store({
         },
         // 获取地区联动菜单
         async getArea ({commit, dispatch, state}) {
-            let res = await fetch('http://192.168.199.248:2001/data/area-linkage.json');
+            let res = await fetch('http://www.keepsoft.cn/wxpt/hehumingluController.do?getDistList.action');
             let data = await res.json();
 
             if(data.state === 200 && data.data) {
