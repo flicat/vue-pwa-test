@@ -58,66 +58,21 @@
 </template>
 
 <script>
-
-    // 获取地区联动菜单
-    async function getArea () {
-        let res = await fetch('http://192.168.199.248:2001/data/area-linkage.json');
-        let data = await res.json();
-
-        if(data.state === 200 && data.data) {
-
-            let list = data.data;
-            let area = {};
-
-            Object.keys(list).forEach(keys => {
-
-                let keyArr = keys.split('-');
-                let currentLevel = null;
-                let currentKey = [];
-
-                function * level () {
-                    let key = yield area;
-
-                    while (key) {
-
-                        currentKey.push(key);
-
-                        if(!currentLevel[key]) {
-                            currentLevel[key] = {
-                                name: list[currentKey.join('-')],
-                                sub: {}
-                            };
-                        }
-                        key = yield currentLevel[key].sub;
-                    }
-
-                }
-
-                let it = level();
-                currentLevel = it.next().value;
-
-                while (keyArr.length) {
-                    currentLevel = it.next(keyArr.shift()).value;
-                }
-
-            });
-
-            this.area = area;
-
-        }
-    }
+    import store from '@/vuex/riverList';
 
     export default {
         name: 'riverList',
+        store,
         components: {
             'all': () => import('./allRiverList.vue'),           // 所有河流列表
             'near': () => import('./nearRiverList.vue')          // 附近河流列表
         },
-        created: getArea,     // 获取地区联动菜单
+        created () {
+            this.$store.dispatch('init');
+        },
         data () {
 
             return {
-                area: null,                    // 地区联动菜单-镇
                 subArea: null,                 // 地区联动菜单-村
                 tabType: 'all',
 
@@ -143,6 +98,9 @@
                 } else {
                     return [];
                 }
+            },
+            area () {
+                return this.$store.state.area;            // 地区联动菜单-镇
             }
         },
         methods: {

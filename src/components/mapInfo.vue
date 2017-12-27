@@ -59,7 +59,7 @@
                 content: '<button type="button" class="btn-map-report">坐标点</button>',
                 events: {
                     click () {
-                        vm.$router.push({ path: `/report-info/${item.reportId}`})
+                        vm.$router.push({name: 'reportInfo', params: {id: item.reportId}})
                     }
                 }
             }));
@@ -115,16 +115,6 @@
                 location: this.center.join(','),
                 range: 1000
             });
-        },
-
-        methods: {
-            handler(id) {
-                console.log(id);
-                // amap vue component
-//                console.log(amapManager._componentMap);
-                // gaode map instance
-//                console.log(amapManager._map);
-            }
         }
     }
 </script>

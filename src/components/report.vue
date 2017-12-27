@@ -123,6 +123,7 @@
     import selectRiver from './selectRiver';             // 河道选择
     import browserMd5File from 'browser-md5-file';             // 获取文件MD5
     import AMap from 'vue-amap';
+    import store from '@/vuex/report';
 
     Vue.use(AMap);
 
@@ -148,79 +149,23 @@
     });
 
 
-    // 获取治水大类联动菜单
-    async function getFloodType () {
-        let res = await fetch('http://192.168.199.248:2001/data/flood-linkage.json');
-        let data = await res.json();
-
-        // 数据已经加载完成
-        this.ready = true;
-
-        if(data.state === 200 && data.data) {
-
-            let list = data.data;
-            let flood = {};
-
-            Object.keys(list).forEach(keys => {
-
-                let keyArr = keys.split('-');
-                let currentLevel = null;
-                let currentKey = [];
-
-                function * level () {
-                    let key = yield flood;
-
-                    while (key) {
-
-                        currentKey.push(key);
-
-                        if(!currentLevel[key]) {
-                            currentLevel[key] = {
-                                name: list[currentKey.join('-')],
-                                sub: {}
-                            };
-                        }
-                        key = yield currentLevel[key].sub;
-                    }
-
-                }
-
-                let it = level();
-                currentLevel = it.next().value;
-
-                while (keyArr.length) {
-                    currentLevel = it.next(keyArr.shift()).value;
-                }
-
-            });
-
-            this.flood = flood;
-
-        }
-    }
-
-
     export default {
         name: 'report',
+        store,
         components: {
             'full-loading': FullLoading,               // loading遮罩
             'select-river': selectRiver               // loading遮罩
         },
         created () {
-            getFloodType.bind(this)();
+            this.$store.dispatch('init');
         },
         data() {
             let that = this;
 
             return {
-                ready: false,
-
-
                 invalid: null,             // 验证失败的字段
                 showMap: false,            // 地图显隐字段
                 showRiver: false,          // 河流列表显隐字段
-
-                flood: null,
 
                 id: null,               // 投诉河道ID
                 riverName: null,        // 河道名称
@@ -298,6 +243,9 @@
                 } else {
                     return [];
                 }
+            },
+            flood () {
+                return this.$store.state.flood;
             }
         },
         methods: {
