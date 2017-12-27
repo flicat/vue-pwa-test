@@ -81,160 +81,10 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
+    import store from '@/vuex/selectRiver';
 
-    // 获取地区联动菜单
-    async function getArea () {
-        let res = await fetch('http://192.168.199.248:2001/data/area-linkage.json');
-        let data = await res.json();
-
-        if(data.state === 200 && data.data) {
-
-            let list = data.data;
-            let area = {};
-
-            Object.keys(list).forEach(keys => {
-
-                let keyArr = keys.split('-');
-                let currentLevel = null;
-                let currentKey = [];
-
-                function * level () {
-                    let key = yield area;
-
-                    while (key) {
-
-                        currentKey.push(key);
-
-                        if(!currentLevel[key]) {
-                            currentLevel[key] = {
-                                name: list[currentKey.join('-')],
-                                sub: {}
-                            };
-                        }
-                        key = yield currentLevel[key].sub;
-                    }
-
-                }
-
-                let it = level();
-                currentLevel = it.next().value;
-
-                while (keyArr.length) {
-                    currentLevel = it.next(keyArr.shift()).value;
-                }
-
-            });
-
-            this.area = area;
-
-        }
-    }
-
-    // 搜索河湖列表
-    async function getData (callback) {
-
-        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
-
-            let url = new URL('http://192.168.199.248:2001/data/river-list.json');
-            url.search = [
-                ['name', this.searchParam.name].join('='),
-                ['town', this.searchParam.town].join('='),
-                ['village', this.searchParam.village].join('='),
-                ['pageIndex', this.pageIndex++].join('='),
-                ['pageSize', this.pageSize].join('=')
-            ].join('&');
-
-            let res = await fetch(url);
-            let data = await res.json();
-
-            // 数据已经加载完成
-            this.ready = true;
-
-            callback && callback();
-
-            if(data.state === 200 && data.data.list && data.data.list.length) {
-                this.pageTotal = data.data.pageTotal;
-
-                if(Array.isArray(this.list)) {
-                    this.list = this.list.concat(data.data.list);
-                } else {
-                    this.list = data.data.list;
-                }
-            } else {
-                alert('没有更多数据！');
-            }
-
-        } else {
-            callback && callback();
-            alert('没有更多数据！');
-        }
-
-    }
-
-    export default {
-        name: 'riverList',
-        components: {
-            'loading': Loading,
-            'full-loading': FullLoading,               // loading遮罩
-            'go-top': goTop
-        },
-        created () {
-            getData.bind(this)();
-            getArea.bind(this)();   // 获取地区联动菜单
-        },
-        data () {
-
-            return {
-                ready: false,                   // 是否加载完成
-                list: null,
-
-                pageIndex: 1,                   // 分页
-                pageSize: 20,                   // 分页
-                pageTotal: null,                 // 分页
-
-                current: null,                  // 当前选中河流
-
-                area: null,                    // 地区联动菜单-镇
-                subArea: null,                 // 地区联动菜单-村
-
-                showSearch: false,                              // 搜索框显隐控制字段
-                searchParam: {                                  // 搜索字段
-                    name: '',                                   // 河流名称
-                    town: '',         // 所属镇
-                    village: ''    // 所属村
-                }
-            };
-        },
-        computed: {
-            townList () {
-                if(this.area) {
-                    return Object.keys(this.area);
-                } else {
-                    return [];
-                }
-            },
-            villageList () {
-                if(this.subArea) {
-                    return Object.keys(this.subArea);
-                } else {
-                    return [];
-                }
-            }
-        },
+    let mixin = {
         methods: {
-            getData,
-            search () {
-                this.showSearch = false;
-                this.pageIndex = 1;
-                this.list = [];
-
-                getData.bind(this)();
-            },
-            // 镇-村联动菜单
-            setArea (subArea) {
-                this.subArea = subArea;
-                this.searchParam.village = '';
-            },
             // 选中河流
             confirm () {
                 if(!this.current) {
@@ -245,6 +95,44 @@
             },
             getWrap () {
                 return this.$refs.wrap;
+            }
+        }
+    };
+
+    export default {
+        name: 'riverList',
+        store,
+        mixins: [mixin],
+        components: {
+            'loading': Loading,
+            'full-loading': FullLoading,               // loading遮罩
+            'go-top': goTop
+        },
+        created () {
+            this.$store.dispatch('init');
+        },
+        data () {
+            return this.$store.state;
+        },
+        computed: {
+            townList () {
+                return this.$store.getters.townList;
+            },
+            villageList () {
+                return this.$store.getters.villageList;
+            }
+        },
+        methods: {
+            getData (callback) {
+                this.$store.dispatch('getData', callback);
+            },
+            // 点击搜索河流
+            search () {
+                this.$store.dispatch('search');
+            },
+            // 镇-村联动菜单
+            setArea (subArea) {
+                this.$store.dispatch('setArea', subArea);
             }
         }
     };

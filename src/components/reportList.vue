@@ -63,69 +63,10 @@
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';                          // 返回顶部按钮
     import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
+    import store from '@/vuex/reportList';
 
-    // 获取列表数据
-    async function getData (callback) {
-
-        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
-
-            let url = new URL('http://192.168.199.248:2001/data/report-list.json');
-            url.search = [
-                ['pageIndex', this.pageIndex++].join('='),
-                ['pageSize', this.pageSize].join('=')].join('&');
-
-            let res = await fetch(url);
-            let data = await res.json();
-
-            // 数据已经加载完成
-            this.ready = true;
-
-            // 关闭底部 loading
-            callback && callback();
-
-            if(data.state === 200) {
-                // 修改总页数
-                this.pageTotal = data.data.pageTotal;
-
-                if(Array.isArray(this.list)) {
-                    // 数据拼接
-                    this.list = this.list.concat(data.data.list);
-                } else {
-                    this.list = data.data.list;
-                }
-            } else {
-                alert('没有更多数据！');
-            }
-
-        } else {
-            // 关闭底部 loading
-            callback && callback();
-            alert('没有更多数据！');
-        }
-
-    }
-
-    export default {
-        name: 'myReport',
-        components: {
-            'loading': Loading,                        // 下拉加载loading
-            'full-loading': FullLoading,               // loading遮罩
-            'go-top': goTop                           // 返回顶部按钮
-        },
-        created: getData,                        // 初始化加载数据
-        data () {
-            return {
-                ready: false,                   // 是否加载完成
-                list: null,                     // 数据列表
-
-                pageIndex: 1,                  // 当前页
-                pageSize: 10,                  // 每页数量
-                pageTotal: null                // 总页数
-            };
-        },
-
+    let mixin = {
         methods: {
-            getData,                          // 加载数据
             getDate (str) {
                 let date = new Date(str);
                 return getTimeStr(date);
@@ -133,6 +74,29 @@
             getWrap () {
                 return this.$refs.wrap;
             }
+        }
+    };
+
+    export default {
+        name: 'myReport',
+        store,
+        mixins: [mixin],
+        components: {
+            'loading': Loading,                        // 下拉加载loading
+            'full-loading': FullLoading,               // loading遮罩
+            'go-top': goTop                           // 返回顶部按钮
+        },
+        created () {
+            this.$store.dispatch('init');
+        },                        // 初始化加载数据
+        data () {
+            return this.$store.state;
+        },
+
+        methods: {
+            getData (callback) {
+                this.$store.dispatch('getData', callback);
+            },
         }
     };
 

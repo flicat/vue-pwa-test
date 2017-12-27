@@ -31,6 +31,7 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
+    import store from '@/vuex/allRiverList';
 
 
     // 搜索河湖列表
@@ -76,35 +77,31 @@
 
     export default {
         name: 'allRiverList',
-        props: ['searchParam', 'search'],
+        store,
+        props: ['searchParam'],
         components: {
             'loading': Loading,
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
         created () {
-            getData.bind(this)();
-
-            // 父层搜索事件
-            this.$on('search', () => {
-                this.pageIndex = 1;
-                this.list = [];
+            if(!this.ready) {
                 getData.bind(this)();
-            });
-
+            }
         },
         data () {
-            return {
-                ready: false,                   // 是否加载完成
-                list: null,
-
-                pageIndex: 1,                   // 分页
-                pageSize: 10,                   // 分页
-                pageTotal: null                 // 分页
-            };
+            return this.$store.state;
         },
         methods: {
             getData,
+
+            // 父层搜索事件
+            search () {
+                this.pageIndex = 1;
+                this.list = [];
+                getData.bind(this)();
+            },
+
             // 点击收藏
             async follow (river) {
                 let follow = !(river.follow - 0) - 0;

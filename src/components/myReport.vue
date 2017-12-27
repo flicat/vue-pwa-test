@@ -29,73 +29,40 @@
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
     import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
+    import store from '@/vuex/myReport';
 
-    // 获取数据
-    async function getData (callback) {
 
-        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
-
-            let url = new URL('http://192.168.199.248:2001/data/my-report.json');
-            url.search = [
-                ['pageIndex', this.pageIndex++].join('='),
-                ['pageSize', this.pageSize].join('=')].join('&');
-
-            let res = await fetch(url);
-            let data = await res.json();
-
-            // 数据已经加载完成
-            this.ready = true;
-
-            callback && callback();
-
-            if(data.state === 200) {
-                this.userInfo = data.data.userInfo;
-                this.pageTotal= data.data.report.pageTotal;
-
-                if(Array.isArray(this.list)) {
-                    this.list = this.list.concat(data.data.report.list);
-                } else {
-                    this.list = data.data.report.list;
-                }
-            } else {
-                alert('没有更多数据！');
-            }
-
-        } else {
-            callback && callback();
-            alert('没有更多数据！');
-        }
-
-    }
-
-    export default {
-        name: 'myReport',
-        components: {
-            'loading': Loading,
-            'full-loading': FullLoading,               // loading遮罩
-            'go-top': goTop
-        },
-        created: getData,
-        data () {
-            return {
-                ready: false,                   // 是否加载完成
-                userInfo: null,
-                list: null,
-
-                pageIndex: 1,
-                pageSize: 10,
-                pageTotal: null
-            };
-        },
-
+    let mixin = {
         methods: {
-            getData,
             getDate (str) {
                 let date = new Date(Number(str));
                 return getTimeStr(date);
             },
             getWrap () {
                 return this.$refs.wrap;
+            }
+        }
+    };
+
+    export default {
+        name: 'myReport',
+        store,
+        mixins: [mixin],
+        components: {
+            'loading': Loading,
+            'full-loading': FullLoading,               // loading遮罩
+            'go-top': goTop
+        },
+        created () {
+            this.$store.dispatch('init');
+        },
+        data () {
+            return this.$store.state;
+        },
+
+        methods: {
+            getData (callback) {
+                this.$store.dispatch('getData', callback);
             }
         }
     };

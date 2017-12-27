@@ -77,7 +77,7 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
-    import store from '@/vuex';
+    import store from '@/vuex/rivererList';
 
     let mixin = {
         methods: {
@@ -104,7 +104,7 @@
             this.$store.dispatch('init');
         },
         data () {
-            return this.$store.state.rivererList;
+            return this.$store.state;
         },
         computed: {
             townList () {

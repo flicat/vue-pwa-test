@@ -150,7 +150,12 @@
                 this.showSearch = false;
                 this.tabType = 'all';
 
-                this.$refs.list.$emit('search')
+                setTimeout(() => {
+                    if(this.$refs.list.search) {
+                        this.$refs.list.search();
+                    }
+                }, 10);
+
             },
             setTab (type) {
                 this.tabType = type;

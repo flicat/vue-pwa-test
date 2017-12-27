@@ -31,6 +31,7 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
+    import store from '@/vuex/nearRiverList';
 
     // 搜索河湖列表
     async function getData (callback) {
@@ -71,22 +72,19 @@
 
     export default {
         name: 'nearRiverList',
+        store,
         components: {
             'loading': Loading,
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
-        created: getData,
+        created () {
+            if(!this.ready) {
+                getData.bind(this)();
+            }
+        },
         data () {
-            return {
-                ready: false,                   // 是否加载完成
-                list: null,
-
-                pageIndex: 1,                   // 分页
-                pageSize: 10,                   // 分页
-                pageTotal: null                 // 分页
-
-            };
+            return this.$store.state;
         },
         methods: {
             getData,

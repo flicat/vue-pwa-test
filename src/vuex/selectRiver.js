@@ -1,7 +1,7 @@
 /*!
  * @author liyuelong1020@gmail.com
  * @date 2017/12/25
- * @description 河长列表
+ * @description 所有河流
  */
 
 import Vue from 'vue'
@@ -15,19 +15,19 @@ export default new Vuex.Store({
         list: null,
 
         pageIndex: 1,                   // 分页
-        pageSize: 10,                   // 分页
-        pageTotal: null,                // 分页
+        pageSize: 20,                   // 分页
+        pageTotal: null,                 // 分页
+
+        current: null,                  // 当前选中河流
 
         area: null,                    // 地区联动菜单-镇
         subArea: null,                 // 地区联动菜单-村
 
-        current: null,                  // 当前查看河长
-
-        showSearch: false,              // 搜索框显隐控制字段
-        searchParam: {                 // 搜索字段
-            name: '',                // 河长名称
-            town: '',                // 所属镇
-            village: ''              // 所属村
+        showSearch: false,                              // 搜索框显隐控制字段
+        searchParam: {                                  // 搜索字段
+            name: '',                                   // 河流名称
+            town: '',         // 所属镇
+            village: ''    // 所属村
         }
     },
     getters: {
@@ -119,7 +119,7 @@ export default new Vuex.Store({
 
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
-                let url = new URL('http://192.168.199.248:2001/data/riverer-list.json');
+                let url = new URL('http://192.168.199.248:2001/data/river-list.json');
                 url.search = [
                     ['name', state.searchParam.name].join('='),
                     ['town', state.searchParam.town].join('='),
