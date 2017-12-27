@@ -9,6 +9,7 @@
                         <p class="label">{{riverName || '请选择（必填）'}}</p>
                         <button class="btn-map" @click="showRiver=!showRiver"></button>
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'id'">请选择投诉河道！</span>
                 </div>
 
                 <div class="form-group row">
@@ -17,13 +18,15 @@
                         <p class="output text-clip">{{address}}</p>
                         <button class="btn-map" @click="openMap"></button>
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'location'">请选择举报位置！</span>
                 </div>
 
                 <div class="form-group row">
                     <div class="form-control col-12">
                         <textarea placeholder="请您具体填写一下报料的位置，如某大厦正南方100米，以便工作人员找到问题。"
-                                  v-model="location_info"></textarea>
+                                  v-model="location_info" name="location_info"></textarea>
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'location_info'">请您具体填写一下报料的位置！</span>
                 </div>
 
                 <div class="form-group row">
@@ -31,6 +34,7 @@
                     <div class="form-control col-8">
                         <input type="text" name="user" v-model="reporter">
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'reporter'">请填写举报人！</span>
                 </div>
 
                 <div class="form-group row">
@@ -38,36 +42,39 @@
                     <div class="form-control col-8">
                         <input type="text" name="user" v-model="phone">
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'phone'">请填写举报电话！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">治水大类</label>
                     <div class="form-control select-control col-8">
-                        <p class="label">请选择（必填）</p>
+                        <p class="label">{{flood && floodType ? flood[floodType].name : '请选择（必填）'}}</p>
                         <select name="river" v-model="floodType">
                             <option value="" disabled>请选择</option>
-                            <option value="1">大埔河</option>
+                            <option v-for="id in floodList" :value="id">{{flood[id].name}}</option>
                         </select>
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'floodType'">请选择治水大类！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">治水子类</label>
                     <div class="form-control select-control col-8">
-                        <p class="label">请选择（必填）</p>
+                        <p class="label">{{subFlood && floodSubType ? subFlood[floodSubType].name : '请选择（必填）'}}</p>
                         <select name="river" v-model="floodSubType">
                             <option value="" disabled>请选择</option>
-                            <option value="1">大埔河</option>
+                            <option v-for="id in subFloodList" :value="id">{{subFlood[id].name}}</option>
                         </select>
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'floodSubType'">请选择治水子类！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">问题描述</label>
                     <div class="form-control col-8">
                         <textarea placeholder="请输入问题内容" v-model="description"></textarea>
-
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'description'">请填写问题描述！</span>
                 </div>
 
                 <div class="form-group row">
@@ -75,6 +82,7 @@
                     <div class="form-control file-control col-8">
                         <input type="file" v-file="getFile" multiple accept="image/*">
                     </div>
+                    <span class="error-msg col-12" v-if="invalid === 'picture'">请至少上传一张照片！</span>
                 </div>
                 <div class="form-group row" v-if="picList.length">
                     <div class="form-control img-control col-3" v-for="src in picList">
@@ -116,7 +124,6 @@
     import browserMd5File from 'browser-md5-file';             // 获取文件MD5
     import AMap from 'vue-amap';
 
-
     Vue.use(AMap);
 
     // 初始化vue-amap
@@ -124,7 +131,7 @@
         // 申请的高德key
         key: 'db51a24a68281139bf38be69e9875b8f',
         // 插件集合
-        plugin: ['AMap.ToolBar', 'AMap.Geocoder']
+        plugin: ['AMap.ToolBar']
     });
 
 
@@ -140,18 +147,80 @@
         }
     });
 
+
+    // 获取治水大类联动菜单
+    async function getFloodType () {
+        let res = await fetch('http://192.168.199.248:2001/data/flood-linkage.json');
+        let data = await res.json();
+
+        // 数据已经加载完成
+        this.ready = true;
+
+        if(data.state === 200 && data.data) {
+
+            let list = data.data;
+            let flood = {};
+
+            Object.keys(list).forEach(keys => {
+
+                let keyArr = keys.split('-');
+                let currentLevel = null;
+                let currentKey = [];
+
+                function * level () {
+                    let key = yield flood;
+
+                    while (key) {
+
+                        currentKey.push(key);
+
+                        if(!currentLevel[key]) {
+                            currentLevel[key] = {
+                                name: list[currentKey.join('-')],
+                                sub: {}
+                            };
+                        }
+                        key = yield currentLevel[key].sub;
+                    }
+
+                }
+
+                let it = level();
+                currentLevel = it.next().value;
+
+                while (keyArr.length) {
+                    currentLevel = it.next(keyArr.shift()).value;
+                }
+
+            });
+
+            this.flood = flood;
+
+        }
+    }
+
+
     export default {
         name: 'report',
         components: {
             'full-loading': FullLoading,               // loading遮罩
             'select-river': selectRiver               // loading遮罩
         },
+        created () {
+            getFloodType.bind(this)();
+        },
         data() {
             let that = this;
 
             return {
-                showMap: false,
-                showRiver: false,
+                ready: false,
+
+
+                invalid: null,             // 验证失败的字段
+                showMap: false,            // 地图显隐字段
+                showRiver: false,          // 河流列表显隐字段
+
+                flood: null,
 
                 id: null,               // 投诉河道ID
                 riverName: null,        // 河道名称
@@ -205,9 +274,30 @@
                         init(instance) {
                         }
                     }
-                }, {
-                    pName: 'AMap.Geocoder',
                 }]
+            }
+        },
+        computed: {
+            subFlood () {
+                if(this.flood && this.floodType) {
+                    return this.flood[this.floodType].sub;
+                } else {
+                    return null;
+                }
+            },
+            floodList () {
+                if(this.flood) {
+                    return Object.keys(this.flood);
+                } else {
+                    return [];
+                }
+            },
+            subFloodList () {
+                if(this.subFlood) {
+                    return Object.keys(this.subFlood);
+                } else {
+                    return [];
+                }
             }
         },
         methods: {
@@ -258,15 +348,65 @@
                 this.showRiver = false;
                 this.id = river.id;
                 this.riverName = river.name;
-                console.log(river);
             },
             // 释放图片内存
             revoke(src) {
                 (URL || webkitURL).revokeObjectURL(src);
             },
-            // 点击提交
-            submit() {
-                console.log(this);
+
+            // 校验表单是否通过验证
+            validate () {
+                let field = {
+                    id: this.id,
+                    location: this.location,
+                    location_info: this.location_info,
+                    reporter: this.reporter,
+                    phone: this.phone,
+                    floodType: this.floodType,
+                    floodSubType: this.floodSubType,
+                    description: this.description,
+                    picture: this.picture.size
+                };
+
+                this.invalid = Object.keys(field).find(name => !field[name]);
+
+                return !this.invalid;
+            },
+
+            // 点击提交爆料
+            async submit() {
+
+                if(this.validate()) {
+
+                    let url = 'http://192.168.199.248:2001/data/report-result.json';
+                    let body = new FormData();
+
+                    body.append('id', this.id);
+                    body.append('location', this.location);
+                    body.append('location_info', this.location_info);
+                    body.append('reporter', this.reporter);
+                    body.append('phone', this.phone);
+                    body.append('floodType', this.floodType);
+                    body.append('floodSubType', this.floodSubType);
+                    body.append('description', this.description);
+                    [...this.picture.values()].forEach(file => body.append('picture[]', file));
+
+                    let headers = new Headers();
+                    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+                    let res = await fetch(url, {
+                        method: 'POST',
+                        headers,
+                        body,
+                    });
+
+                    let data = await res.json();
+
+                    if(data && data.data && data.data.message) {
+                        alert(data.data.message);
+                    }
+
+                }
             }
         }
     }
@@ -365,6 +505,14 @@
                 width: 90%;
             }
 
+        }
+
+        .error-msg {
+            color: #f00;
+            font-size: (30 / @rem);
+            font-weight: 400;
+            line-height: 1em;
+            margin-top: 0.5em;
         }
 
         .btn-submit {

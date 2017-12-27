@@ -32,7 +32,7 @@
 
     // 获取栏目列表
     async function getColumn () {
-        let url = new URL('http://conf.free.ngrok.cc/cmsMenuController.do?cmsMenuList');
+        let url = new URL('http://www.keepsoft.cn/wxpt/cmsMenuController.do?cmsMenuList');
 
         let res = await fetch(url);
         let data = await res.json();
@@ -53,7 +53,7 @@
 
         if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
-            let url = new URL('http://conf.free.ngrok.cc/cmsArticleController.do');
+            let url = new URL('http://www.keepsoft.cn/wxpt/cmsArticleController.do');
             url.search = [
                 'cmsArticleList',
                 ['columnId', this.id].join('='),

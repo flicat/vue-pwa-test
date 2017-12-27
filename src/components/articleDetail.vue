@@ -26,7 +26,7 @@
         },
         created: async function () {
             // 获取数据
-            let url = new URL('http://conf.free.ngrok.cc/cmsArticleController.do');
+            let url = new URL('http://www.keepsoft.cn/wxpt/cmsArticleController.do');
 
             url.search = [
                 'cmsArticleDetail',

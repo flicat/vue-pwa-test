@@ -41,7 +41,7 @@
 
     // 获取列表数据
     async function getData () {
-        let url = new URL('http://conf.free.ngrok.cc/weixinExposureInfoController.do');
+        let url = new URL('http://www.keepsoft.cn/wxpt/weixinExposureInfoController.do');
         url.search = [
             'baoliaoDetail',
             ['id', this.id].join('=')
