@@ -6,7 +6,7 @@
             <button class="btn-search text-hide pull-right" @click="showSearch=!showSearch">搜索</button>
         </div>
 
-        <component :is="tabType" :searchParam="searchParam" ref="list"></component>
+        <component :is="tabType"></component>
 
         <div v-show="showSearch" class="search-form box">
             <div class="search-top row">

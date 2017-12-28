@@ -41,37 +41,41 @@
     let amapManager = new AMap.AMapManager();
 
     // 获取坐标点
-    function getData(vm, param) {
+    function getData() {
+        let that = this;
+
         let markers = [];
 
         ajax.mapReview({
             param: {
-                'longitude': param.location[0],
-                'latitude': param.location[1],
-                'distance': param.range
+                'longitude': that.center[0],
+                'latitude': that.center[1],
+                'distance': 1000
             }
         }).then(data => {
+
             if (data && data.state === 200 && data.data && data.data.length) {
 
                 data.data.forEach(item => markers.push({
                     position: item.location.split(','),
-                    content: '<button type="button" class="btn-map-report">坐标点</button>',
+                    content: '<a href="javascript:;" class="btn-map-report"></a>',
                     events: {
                         click() {
-                            vm.$router.push({name: 'reportInfo', params: {id: item.reportId}})
+                            that.$router.push({name: 'reportInfo', params: {id: item.reportId}})
                         }
                     }
                 }));
             }
 
-            vm.markers = markers;
+            that.markers = markers;
         });
 
     }
 
-
     export default {
         name: 'mapInfo',
+
+        created: getData,
 
         data: function () {
 
@@ -83,10 +87,16 @@
                 center: [112.865569, 23.951898],
                 events: {
                     moveend: (e) => {
-                        console.log(e)
+                        if (this.$refs.map) {
+                            this.center = this.$refs.map.$$getCenter();
+                            getData.bind(this)();
+                        }
                     },
                     zoomchange: (e) => {
-                        console.log(e)
+                        if (this.$refs.map) {
+                            this.center = this.$refs.map.$$getCenter();
+                            getData.bind(this)();
+                        }
                     }
                 },
                 plugin: [
@@ -97,19 +107,11 @@
                         liteStyle: true,
                         events: {
                             init(instance) {
-//                                console.log(instance);
                             }
                         }
                     }
                 ]
             };
-        },
-
-        created() {
-            getData(this, {
-                location: this.center,
-                range: 1000
-            });
         }
     }
 </script>
@@ -150,9 +152,15 @@
     }
 
 </style>
-<style>
+<style lang="less">
+    @import "../assets/css/base.less";
     .btn-map-report {
         position: relative;
         z-index: 99999;
+        display: block;
+        width: (45 / @rem);
+        height: (59 / @rem);
+        background: url(../assets/images/icon-point.png) no-repeat 0 0;
+        background-size: 100%;
     }
 </style>

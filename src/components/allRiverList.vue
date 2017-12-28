@@ -32,12 +32,10 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
-    import store from '@/vuex/riverList';
     import ajax from '@/config/fetch'
 
     export default {
         name: 'allRiverList',
-        store,
         components: {
             'loading': Loading,
             'full-loading': FullLoading,               // loading遮罩

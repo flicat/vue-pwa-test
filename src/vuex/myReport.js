@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ajax from '@/config/fetch'
+import Global from './index'
 
 Vue.use(Vuex);
 
@@ -33,6 +34,8 @@ export default new Vuex.Store({
 
                 ajax.reportList({
                     param: {
+                        code: state.Global.code,
+                        appid: state.Global.appid,
                         functionType: 1,
                         pageIndex: state.pageIndex++,
                         pageSize: state.pageSize
@@ -66,6 +69,10 @@ export default new Vuex.Store({
 
         }
 
+    },
+
+    modules: {
+        Global
     }
 
 });

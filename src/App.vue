@@ -7,13 +7,19 @@
 
 <script>
     import FullLoading from '@/widget/full-loading';
+    import store from '@/vuex';
 
     export default {
         name: 'app',
+        store,
         components: {
             'full-loading': FullLoading
         },
-        props: ['loading']
+        props: ['loading'],
+        updated() {
+            // 保存微信 code 和 appid
+            this.$store.commit('appCode', this.$route.query);
+        }
     }
 </script>
 

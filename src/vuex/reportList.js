@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ajax from '@/config/fetch'
+import Global from './index'
 
 Vue.use(Vuex);
 
@@ -19,7 +20,6 @@ export default new Vuex.Store({
         pageSize: 10,                  // 每页数量
         pageTotal: null                // 总页数
     },
-
     actions: {
         init ({commit, dispatch, state}) {
             if(!state.ready) {
@@ -34,6 +34,8 @@ export default new Vuex.Store({
 
                 ajax.reportList({
                     param: {
+                        code: state.Global.code,
+                        appid: state.Global.appid,
                         functionType: 0,
                         pageIndex: state.pageIndex++,
                         pageSize: state.pageSize
@@ -70,6 +72,10 @@ export default new Vuex.Store({
 
         }
 
+    },
+
+    modules: {
+        Global
     }
 
 });

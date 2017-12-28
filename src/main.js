@@ -12,7 +12,7 @@ let VM = new Vue({
     el: '#app',
     router,
     data: {
-        showLoading: false
+        showLoading: false         // 页面切换全局loading
     },
     template: '<App :loading="showLoading"/>',
     components: {App}

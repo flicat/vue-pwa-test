@@ -87,8 +87,8 @@
             'go-top': goTop                           // 返回顶部按钮
         },
         created () {
-            this.$store.dispatch('init');
-        },                        // 初始化加载数据
+            this.$store.dispatch('init');// 初始化加载数据
+        },
         data () {
             return this.$store.state;
         },
