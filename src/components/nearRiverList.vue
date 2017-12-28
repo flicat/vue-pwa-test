@@ -2,7 +2,7 @@
     <section class="flex">
         <article class="flex-content" ref="wrap">
             <ul v-if="list && list.length" class="river-list">
-                <li class="river-item" v-for="river in list" :key="river.id">
+                <li class="river-item" v-for="river in list">
                     <router-link :to="'/river-info/' + river.id">
                         <img :src="river.thumb" alt="" class="thumb">
                         <p class="name">{{river.name}}</p>
@@ -32,45 +32,8 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
-    import store from '@/vuex/nearRiverList';
+    import store from '@/vuex/riverList';
     import ajax from '@/config/fetch'
-
-    // 搜索河湖列表
-    function getData(callback) {
-
-        if (!this.pageTotal || this.pageIndex <= this.pageTotal) {
-
-            ajax.nearbyRiver({
-                param: {
-                    'pageIndex': this.pageIndex++,
-                    'pageSize': this.pageSize
-                }
-            }).then(data => {
-
-                // 数据已经加载完成
-                this.ready = true;
-
-                callback && callback();
-
-                if (data.state === 200 && data.data.list && data.data.list.length) {
-                    this.pageTotal = data.data.pageTotal;
-
-                    if (Array.isArray(this.list)) {
-                        this.list = this.list.concat(data.data.list);
-                    } else {
-                        this.list = data.data.list;
-                    }
-                } else {
-                    alert('没有更多数据！');
-                }
-            });
-
-        } else {
-            callback && callback();
-            alert('没有更多数据！');
-        }
-
-    }
 
     export default {
         name: 'nearRiverList',
@@ -81,15 +44,15 @@
             'go-top': goTop
         },
         created() {
-            if (!this.ready) {
-                getData.bind(this)();
-            }
+            this.$store.dispatch('initNear');
         },
         data() {
-            return this.$store.state;
+            return this.$store.state.nearRiver;
         },
         methods: {
-            getData,
+            getData (callback) {
+                this.$store.dispatch('getDataNear', callback);
+            },
             // 点击收藏
             follow(river) {
                 let follow = !(river.follow - 0) - 0;
@@ -100,7 +63,7 @@
                         'id': river.id
                     }
                 }).then(data => {
-                    if (data.state === 200) {
+                    if (data && data.state === 200) {
                         Vue.set(river, 'follow', follow);
                     }
                 });

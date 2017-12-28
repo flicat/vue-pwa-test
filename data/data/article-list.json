@@ -47,6 +47,18 @@
                 "date": 1513665021000,
                 "album": "http://192.168.199.248:2001/pic/banner.jpg"
             }
-        ]
+        ],
+        "columnInfo": {
+            "name": "工作动态",
+            "id": "402847485ecc5cf6015eccc3509b0020",
+            "type": "01",
+            "imageName": "listsa.jpg",
+            "imageHref": "http://192.168.199.248:2001/pic/list.jpg",
+            "createBy": "402847485ecb86be015ecb9cecf70008",
+            "createName": "admin",
+            "createDate": 1506673906000,
+            "accountid": "402847485ecb9de5015ecbafd7210002",
+            "hasTitlePicture": 1
+        }
     }
 }

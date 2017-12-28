@@ -1,7 +1,7 @@
 <template>
     <div class="box">
-        <div class="top-menu row">
-            <h2 class="title pull-left">浈江大埔市段</h2>
+        <div class="top-menu row" v-if="data">
+            <h2 class="title pull-left">{{data.name}}</h2>
             <button class="btn-search text-hide pull-right" @click="showSearch=!showSearch">搜索</button>
         </div>
 
@@ -174,7 +174,7 @@
                 // 数据已经加载完成
                 this.ready = true;
 
-                if (data.state === 200) {
+                if (data && data.state === 200) {
                     this.data = data.data;
                 }
             });
@@ -232,7 +232,7 @@
                 this.$router.replace({name: 'riverInfo', params: {id: this.data.supRiverId}});
 
                 getDate(this.data.supRiverId).then(data => {
-                    if (data.state === 200) {
+                    if (data && data.state === 200) {
                         this.data = data.data;
                     }
                 });

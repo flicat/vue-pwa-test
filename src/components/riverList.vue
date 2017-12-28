@@ -69,59 +69,35 @@
         },
         created () {
             this.$store.dispatch('init');
+
+            this.searchParam.town = this.$route.query.town;
+            this.searchParam.village = this.$route.query.village;
+
+            if(this.searchParam.town || this.searchParam.village) {
+                this.$store.dispatch('search');
+            }
         },
         data () {
-
-            return {
-                subArea: null,                 // 地区联动菜单-村
-                tabType: 'all',
-
-                showSearch: false,                              // 搜索框显隐控制字段
-                searchParam: {                                  // 搜索字段
-                    name: '',                                   // 河流名称
-                    town: this.$route.query.town || '',         // 所属镇
-                    village: this.$route.query.village || ''    // 所属村
-                }
-            };
+            return this.$store.state;
         },
         computed: {
             townList () {
-                if(this.area) {
-                    return Object.keys(this.area);
-                } else {
-                    return [];
-                }
+                return this.$store.getters.townList;
             },
             villageList () {
-                if(this.subArea) {
-                    return Object.keys(this.subArea);
-                } else {
-                    return [];
-                }
-            },
-            area () {
-                return this.$store.state.area;            // 地区联动菜单-镇
+                return this.$store.getters.villageList;
             }
         },
         methods: {
             search () {
-                this.showSearch = false;
-                this.tabType = 'all';
-
-                setTimeout(() => {
-                    if(this.$refs.list.search) {
-                        this.$refs.list.search();
-                    }
-                }, 10);
-
+                this.$store.dispatch('search');
             },
             setTab (type) {
-                this.tabType = type;
+                this.$store.dispatch('setTab', type);
             },
             // 镇-村联动菜单
             setArea (subArea) {
-                this.subArea = subArea;
-                this.searchParam.village = '';
+                this.$store.dispatch('setArea', subArea);
             }
         }
     };

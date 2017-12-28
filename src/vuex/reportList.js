@@ -46,7 +46,7 @@ export default new Vuex.Store({
                     // 关闭底部 loading
                     callback && callback();
 
-                    if(data.state === 200) {
+                    if(data && data.state === 200) {
                         // 修改总页数
                         state.pageTotal = data.data.pageTotal;
 

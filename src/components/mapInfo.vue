@@ -46,11 +46,12 @@
 
         ajax.mapReview({
             param: {
-                'location': param.location,
-                'range': param.range
+                'longitude': param.location[0],
+                'latitude': param.location[1],
+                'distance': param.range
             }
         }).then(data => {
-            if (data.state === 200 && data.data && data.data.length) {
+            if (data && data.state === 200 && data.data && data.data.length) {
 
                 data.data.forEach(item => markers.push({
                     position: item.location.split(','),
@@ -81,16 +82,10 @@
                 zoom: 12,
                 center: [112.865569, 23.951898],
                 events: {
-                    init: (o) => {
-
-                    },
-                    'moveend': (e) => {
+                    moveend: (e) => {
                         console.log(e)
                     },
-                    'zoomchange': (e) => {
-                        console.log(e)
-                    },
-                    'click': (e) => {
+                    zoomchange: (e) => {
                         console.log(e)
                     }
                 },
@@ -112,7 +107,7 @@
 
         created() {
             getData(this, {
-                location: this.center.join(','),
+                location: this.center,
                 range: 1000
             });
         }

@@ -72,7 +72,7 @@ export default new Vuex.Store({
 
             ajax.areaLinkage().then(data => {
 
-                if(data.state === 200 && data.data) {
+                if(data && data.state === 200 && data.data) {
 
                     let list = data.data;
                     let area = {};
@@ -137,7 +137,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if(data.state === 200 && data.data.list && data.data.list.length) {
+                    if(data && data.state === 200 && data.data.list && data.data.list.length) {
                         state.pageTotal = data.data.pageTotal;
 
                         if(Array.isArray(state.list)) {

@@ -44,7 +44,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if(data.state === 200) {
+                    if(data && data.state === 200) {
                         state.userInfo = data.data.userInfo;
                         state.pageTotal= data.data.report.pageTotal;
 

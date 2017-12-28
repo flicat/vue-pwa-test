@@ -35,7 +35,7 @@
                 // 数据已经加载完成
                 this.ready = true;
 
-                if(data.state === 200) {
+                if(data && data.state === 200) {
                     this.data= data.data;
                 }
             });

@@ -48,7 +48,7 @@
 
                 callback && callback();
 
-                if (data.state === 200) {
+                if (data && data.state === 200) {
                     this.pageTotal = data.data.pageTotal;
 
                     if(data.data.list && data.data.list.length) {
