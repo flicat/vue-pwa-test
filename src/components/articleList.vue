@@ -29,57 +29,47 @@
     import Loading from '@/widget/loading';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
-
-    // 获取栏目列表
-    async function getColumn () {
-        let url = new URL('http://www.keepsoft.cn/wxpt/cmsMenuController.do?cmsMenuList');
-
-        let res = await fetch(url);
-        let data = await res.json();
-
-        if(data && data.state === 200) {
-            let current = data.data.find(item => {
-                return item.id === this.id;
-            });
-            if(current) {
-                this.title = current.name;
-                document.title = current.name;
-            }
-        }
-    }
+    import ajax from '@/config/fetch'
 
     // 获取文章列表
-    async function getData (callback) {
+    function getData(callback) {
 
-        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
+        if (!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
-            let url = new URL('http://www.keepsoft.cn/wxpt/cmsArticleController.do');
-            url.search = [
-                'cmsArticleList',
-                ['columnId', this.id].join('='),
-                ['pageIndex', this.pageIndex++].join('='),
-                ['pageSize', this.pageSize].join('=')
-            ].join('&');
-
-            let res = await fetch(url);
-            let data = await res.json();
-
-            // 数据已经加载完成
-            this.ready = true;
-
-            callback && callback();
-
-            if(data.state === 200 && data.data.list && data.data.list.length) {
-                this.pageTotal = data.data.pageTotal;
-
-                if(Array.isArray(this.list)) {
-                    this.list = this.list.concat(data.data.list);
-                } else {
-                    this.list = data.data.list;
+            ajax.articleList({
+                param: {
+                    'columnId': this.id,
+                    'pageIndex': this.pageIndex++,
+                    'pageSize': this.pageSize
                 }
-            } else {
-                alert('没有更多数据！');
-            }
+            }).then(data => {
+                // 数据已经加载完成
+                this.ready = true;
+
+                callback && callback();
+
+                if (data.state === 200) {
+                    this.pageTotal = data.data.pageTotal;
+
+                    if(data.data.list && data.data.list.length) {
+
+                        if (Array.isArray(this.list)) {
+                            this.list = this.list.concat(data.data.list);
+                        } else {
+                            this.list = data.data.list;
+                        }
+                    }
+
+                    if(data.data.columnInfo) {
+                        this.title = data.data.columnInfo.name;
+                        document.title = data.data.columnInfo.name;
+                    }
+
+                } else {
+                    alert('没有更多数据！');
+                }
+
+            });
 
         } else {
             callback && callback();
@@ -96,11 +86,8 @@
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
-        created () {
-            getData.bind(this)();
-            getColumn.bind(this)();
-        },
-        data () {
+        created: getData,
+        data() {
             return {
                 ready: false,                   // 是否加载完成
                 list: null,
@@ -113,11 +100,11 @@
         },
         methods: {
             getData,
-            getDate (str) {
+            getDate(str) {
                 let date = new Date(Number(str));
                 return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
             },
-            getWrap () {
+            getWrap() {
                 return this.$refs.wrap;
             }
         }
@@ -155,6 +142,7 @@
             background-size: (36 / @rem);
         }
     }
+
     .news-list {
         margin: 0;
         padding: 0 0 0 (15 / @rem);
@@ -204,7 +192,6 @@
             }
         }
     }
-
 
 
 </style>

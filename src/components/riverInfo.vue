@@ -139,6 +139,7 @@
     import goTop from '@/widget/goTop';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import AMap from 'vue-amap';
+    import ajax from '@/config/fetch'
 
     Vue.use(AMap);
 
@@ -152,13 +153,13 @@
 
 
     // 获取数据
-    async function getDate (id) {
+    function getDate (id) {
         // 获取数据
-        let url = new URL('http://192.168.199.248:2001/data/river-info.json');
-        url.search = 'id=' + id;
-
-        let res = await fetch(url);
-        return await res.json();
+        return ajax.riverInfo({
+            param: {
+                id
+            }
+        });
     }
 
     export default {

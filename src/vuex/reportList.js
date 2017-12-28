@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 
@@ -27,39 +28,39 @@ export default new Vuex.Store({
         },
 
         // 获取列表数据
-        async getData ({commit, dispatch, state}, callback) {
+        getData ({commit, dispatch, state}, callback) {
 
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
-                let url = new URL('http://conf.free.ngrok.cc/weixinExposureInfoController.do');
-                url.search = [
-                    'baoliaoList',
-                    ['functionType', 0].join('='),
-                    ['pageIndex', state.pageIndex++].join('='),
-                    ['pageSize', state.pageSize].join('=')].join('&');
-
-                let res = await fetch(url);
-                let data = await res.json();
-
-                // 数据已经加载完成
-                state.ready = true;
-
-                // 关闭底部 loading
-                callback && callback();
-
-                if(data.state === 200) {
-                    // 修改总页数
-                    state.pageTotal = data.data.pageTotal;
-
-                    if(Array.isArray(state.list)) {
-                        // 数据拼接
-                        state.list = state.list.concat(data.data.list);
-                    } else {
-                        state.list = data.data.list;
+                ajax.reportList({
+                    param: {
+                        functionType: 0,
+                        pageIndex: state.pageIndex++,
+                        pageSize: state.pageSize
                     }
-                } else {
-                    alert('没有更多数据！');
-                }
+                }).then(data => {
+
+                    // 数据已经加载完成
+                    state.ready = true;
+
+                    // 关闭底部 loading
+                    callback && callback();
+
+                    if(data.state === 200) {
+                        // 修改总页数
+                        state.pageTotal = data.data.pageTotal;
+
+                        if(Array.isArray(state.list)) {
+                            // 数据拼接
+                            state.list = state.list.concat(data.data.list);
+                        } else {
+                            state.list = data.data.list;
+                        }
+                    } else {
+                        alert('没有更多数据！');
+                    }
+
+                });
 
             } else {
                 // 关闭底部 loading

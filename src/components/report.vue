@@ -124,6 +124,7 @@
     import browserMd5File from 'browser-md5-file';             // 获取文件MD5
     import AMap from 'vue-amap';
     import store from '@/vuex/report';
+    import ajax from '@/config/fetch';
 
     Vue.use(AMap);
 
@@ -182,7 +183,7 @@
 
                 amapManager: new AMap.AMapManager(),
                 zoom: 12,
-                center: [0, 0],
+                center: [116.695195, 24.347783],
                 marker: null,
                 events: {
                     click(e) {
@@ -322,11 +323,13 @@
             },
 
             // 点击提交爆料
-            async submit() {
+            submit() {
 
                 if(this.validate()) {
 
-                    let url = 'http://192.168.199.248:2001/data/report-result.json';
+                    let headers = new Headers();
+                    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
                     let body = new FormData();
 
                     body.append('id', this.id);
@@ -339,20 +342,17 @@
                     body.append('description', this.description);
                     [...this.picture.values()].forEach(file => body.append('picture[]', file));
 
-                    let headers = new Headers();
-                    headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-                    let res = await fetch(url, {
-                        method: 'POST',
-                        headers,
-                        body,
+                    ajax.report({
+                        option: {
+                            method: 'POST',
+                            headers,
+                            body,
+                        }
+                    }).then(data => {
+                        if(data && data.data && data.data.message) {
+                            alert(data.data.message);
+                        }
                     });
-
-                    let data = await res.json();
-
-                    if(data && data.data && data.data.message) {
-                        alert(data.data.message);
-                    }
 
                 }
             }

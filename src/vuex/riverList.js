@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 
@@ -23,53 +24,53 @@ export default new Vuex.Store({
         },
 
         // 获取地区联动菜单
-        async getArea ({commit, dispatch, state}) {
-            let res = await fetch('http://192.168.199.248:2001/data/area-linkage.json');
-            let data = await res.json();
+        getArea ({commit, dispatch, state}) {
+            ajax.areaLinkage().then(data => {
+                state.ready = true;
 
-            state.ready = true;
+                if(data.state === 200 && data.data) {
 
-            if(data.state === 200 && data.data) {
+                    let list = data.data;
+                    let area = {};
 
-                let list = data.data;
-                let area = {};
+                    Object.keys(list).forEach(keys => {
 
-                Object.keys(list).forEach(keys => {
+                        let keyArr = keys.split('-');
+                        let currentLevel = null;
+                        let currentKey = [];
 
-                    let keyArr = keys.split('-');
-                    let currentLevel = null;
-                    let currentKey = [];
+                        function * level () {
+                            let key = yield area;
 
-                    function * level () {
-                        let key = yield area;
+                            while (key) {
 
-                        while (key) {
+                                currentKey.push(key);
 
-                            currentKey.push(key);
-
-                            if(!currentLevel[key]) {
-                                currentLevel[key] = {
-                                    name: list[currentKey.join('-')],
-                                    sub: {}
-                                };
+                                if(!currentLevel[key]) {
+                                    currentLevel[key] = {
+                                        name: list[currentKey.join('-')],
+                                        sub: {}
+                                    };
+                                }
+                                key = yield currentLevel[key].sub;
                             }
-                            key = yield currentLevel[key].sub;
+
                         }
 
-                    }
+                        let it = level();
+                        currentLevel = it.next().value;
 
-                    let it = level();
-                    currentLevel = it.next().value;
+                        while (keyArr.length) {
+                            currentLevel = it.next(keyArr.shift()).value;
+                        }
 
-                    while (keyArr.length) {
-                        currentLevel = it.next(keyArr.shift()).value;
-                    }
+                    });
 
-                });
+                    state.area = area;
 
-                state.area = area;
+                }
 
-            }
+            });
         }
 
     }

@@ -9,7 +9,8 @@
                 :plugin="plugin"
                 :events="events"
                 class="flex-content">
-                <el-amap-marker v-for="marker in markers" :position="marker.position" :content="marker.content" :events="marker.events"></el-amap-marker>
+                <el-amap-marker v-for="marker in markers" :position="marker.position" :content="marker.content"
+                                :events="marker.events"></el-amap-marker>
             </el-amap>
         </section>
 
@@ -25,6 +26,7 @@
 <script>
     import Vue from 'vue';
     import AMap from 'vue-amap';
+    import ajax from '@/config/fetch'
 
     Vue.use(AMap);
 
@@ -39,47 +41,45 @@
     let amapManager = new AMap.AMapManager();
 
     // 获取坐标点
-    async function getData (vm, param) {
+    function getData(vm, param) {
         let markers = [];
 
-        let url = new URL('http://192.168.199.248:2001/data/report-point.json');
+        ajax.mapReview({
+            param: {
+                'location': param.location,
+                'range': param.range
+            }
+        }).then(data => {
+            if (data.state === 200 && data.data && data.data.length) {
 
-        url.search = [
-            ['location', param.location].join('='),
-            ['range', param.range].join('=')
-        ].join('&');
-
-        let res = await fetch(url);
-        let data = await res.json();
-
-        if(data.state === 200 && data.data && data.data.length) {
-
-            data.data.forEach(item => markers.push({
-                position: item.location.split(','),
-                content: '<button type="button" class="btn-map-report">坐标点</button>',
-                events: {
-                    click () {
-                        vm.$router.push({name: 'reportInfo', params: {id: item.reportId}})
+                data.data.forEach(item => markers.push({
+                    position: item.location.split(','),
+                    content: '<button type="button" class="btn-map-report">坐标点</button>',
+                    events: {
+                        click() {
+                            vm.$router.push({name: 'reportInfo', params: {id: item.reportId}})
+                        }
                     }
-                }
-            }));
-        }
+                }));
+            }
 
-        vm.markers = markers;
+            vm.markers = markers;
+        });
+
     }
 
 
     export default {
         name: 'mapInfo',
 
-        data: function() {
+        data: function () {
 
             return {
                 markers: [],
 
                 amapManager,
                 zoom: 12,
-                center: [112.865569,23.951898],
+                center: [112.865569, 23.951898],
                 events: {
                     init: (o) => {
 
@@ -110,7 +110,7 @@
             };
         },
 
-        created () {
+        created() {
             getData(this, {
                 location: this.center.join(','),
                 range: 1000
@@ -133,7 +133,7 @@
         height: (117 / @rem);
         border: 1px solid #c0c0c0;
         border-radius: 50%;
-        box-shadow: 1px 1px 10px rgba(0,0,0,.3);
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, .3);
         background-color: #fff;
         text-align: center;
         line-height: 1.1em;

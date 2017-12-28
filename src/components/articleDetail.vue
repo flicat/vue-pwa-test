@@ -16,6 +16,7 @@
 <script>
     import goTop from '@/widget/goTop';
     import FullLoading from '@/widget/full-loading';             // loading遮罩
+    import ajax from '@/config/fetch'
 
     export default {
         name: 'articleList',
@@ -24,24 +25,21 @@
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
-        created: async function () {
-            // 获取数据
-            let url = new URL('http://www.keepsoft.cn/wxpt/cmsArticleController.do');
+        created () {
 
-            url.search = [
-                'cmsArticleDetail',
-                ['articleId', this.id].join('=')
-            ].join('&');
+            ajax.articleDetail({
+                param: {
+                    articleId: this.id
+                }
+            }).then(data => {
+                // 数据已经加载完成
+                this.ready = true;
 
-            let res = await fetch(url);
-            let data = await res.json();
+                if(data.state === 200) {
+                    this.data= data.data;
+                }
+            });
 
-            // 数据已经加载完成
-            this.ready = true;
-
-            if(data.state === 200) {
-                this.data= data.data;
-            }
         },
         data () {
             return {

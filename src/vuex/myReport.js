@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 
@@ -26,37 +27,37 @@ export default new Vuex.Store({
             }
         },
         // 获取数据
-        async getData ({commit, dispatch, state}, callback) {
+        getData ({commit, dispatch, state}, callback) {
 
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
-                let url = new URL('http://conf.free.ngrok.cc/weixinExposureInfoController.do');
-                url.search = [
-                    'baoliaoList',
-                    ['functionType', 1].join('='),
-                    ['pageIndex', state.pageIndex++].join('='),
-                    ['pageSize', state.pageSize].join('=')].join('&');
-
-                let res = await fetch(url);
-                let data = await res.json();
-
-                // 数据已经加载完成
-                state.ready = true;
-
-                callback && callback();
-
-                if(data.state === 200) {
-                    state.userInfo = data.data.userInfo;
-                    state.pageTotal= data.data.report.pageTotal;
-
-                    if(Array.isArray(state.list)) {
-                        state.list = state.list.concat(data.data.report.list);
-                    } else {
-                        state.list = data.data.report.list;
+                ajax.reportList({
+                    param: {
+                        functionType: 1,
+                        pageIndex: state.pageIndex++,
+                        pageSize: state.pageSize
                     }
-                } else {
-                    alert('没有更多数据！');
-                }
+                }).then(data => {
+
+                    // 数据已经加载完成
+                    state.ready = true;
+
+                    callback && callback();
+
+                    if(data.state === 200) {
+                        state.userInfo = data.data.userInfo;
+                        state.pageTotal= data.data.report.pageTotal;
+
+                        if(Array.isArray(state.list)) {
+                            state.list = state.list.concat(data.data.report.list);
+                        } else {
+                            state.list = data.data.report.list;
+                        }
+                    } else {
+                        alert('没有更多数据！');
+                    }
+
+                });
 
             } else {
                 callback && callback();

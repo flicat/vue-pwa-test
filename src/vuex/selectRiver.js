@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 
@@ -67,86 +68,87 @@ export default new Vuex.Store({
             state.searchParam.village = '';
         },
         // 获取地区联动菜单
-        async getArea ({commit, dispatch, state}) {
-            let res = await fetch('http://www.keepsoft.cn/wxpt/hehumingluController.do?getDistList.action');
-            let data = await res.json();
+        getArea ({commit, dispatch, state}) {
 
-            if(data.state === 200 && data.data) {
+            ajax.areaLinkage().then(data => {
+                if(data.state === 200 && data.data) {
 
-                let list = data.data;
-                let area = {};
+                    let list = data.data;
+                    let area = {};
 
-                Object.keys(list).forEach(keys => {
+                    Object.keys(list).forEach(keys => {
 
-                    let keyArr = keys.split('-');
-                    let currentLevel = null;
-                    let currentKey = [];
+                        let keyArr = keys.split('-');
+                        let currentLevel = null;
+                        let currentKey = [];
 
-                    function * level () {
-                        let key = yield area;
+                        function * level () {
+                            let key = yield area;
 
-                        while (key) {
+                            while (key) {
 
-                            currentKey.push(key);
+                                currentKey.push(key);
 
-                            if(!currentLevel[key]) {
-                                currentLevel[key] = {
-                                    name: list[currentKey.join('-')],
-                                    sub: {}
-                                };
+                                if(!currentLevel[key]) {
+                                    currentLevel[key] = {
+                                        name: list[currentKey.join('-')],
+                                        sub: {}
+                                    };
+                                }
+                                key = yield currentLevel[key].sub;
                             }
-                            key = yield currentLevel[key].sub;
+
                         }
 
-                    }
+                        let it = level();
+                        currentLevel = it.next().value;
 
-                    let it = level();
-                    currentLevel = it.next().value;
+                        while (keyArr.length) {
+                            currentLevel = it.next(keyArr.shift()).value;
+                        }
 
-                    while (keyArr.length) {
-                        currentLevel = it.next(keyArr.shift()).value;
-                    }
+                    });
 
-                });
+                    state.area = area;
 
-                state.area = area;
+                }
+            });
 
-            }
         },
 
         // 搜索河长列表
-        async getData ({commit, dispatch, state}, callback) {
+        getData ({commit, dispatch, state}, callback) {
 
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
-                let url = new URL('http://192.168.199.248:2001/data/river-list.json');
-                url.search = [
-                    ['name', state.searchParam.name].join('='),
-                    ['town', state.searchParam.town].join('='),
-                    ['village', state.searchParam.village].join('='),
-                    ['pageIndex', state.pageIndex++].join('='),
-                    ['pageSize', state.pageSize].join('=')
-                ].join('&');
-
-                let res = await fetch(url);
-                let data = await res.json();
-
-                // 数据已经加载完成
-                state.ready = true;
-
-                callback && callback();
-
-                if(data.state === 200 && data.data.list && data.data.list.length) {
-                    state.pageTotal = data.data.pageTotal;
-
-                    if(Array.isArray(state.list)) {
-                        state.list = state.list.concat(data.data.list);
-                    } else {
-                        state.list = data.data.list;
+                ajax.riverList({
+                    param: {
+                        name: state.searchParam.name,
+                        town: state.searchParam.town,
+                        village: state.searchParam.village,
+                        pageIndex: state.pageIndex++,
+                        pageSize: state.pageSize
                     }
-                } else {
-                    alert('没有更多数据！');
-                }
+                }).then(data => {
+
+                    // 数据已经加载完成
+                    state.ready = true;
+
+                    callback && callback();
+
+                    if(data.state === 200 && data.data.list && data.data.list.length) {
+                        state.pageTotal = data.data.pageTotal;
+
+                        if(Array.isArray(state.list)) {
+                            state.list = state.list.concat(data.data.list);
+                        } else {
+                            state.list = data.data.list;
+                        }
+                    } else {
+                        alert('没有更多数据！');
+                    }
+
+                });
             } else {
                 callback && callback();
                 alert('没有更多数据！');

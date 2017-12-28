@@ -14,7 +14,8 @@
                             <span class="label end">终点：{{river.end}}</span>
                         </div>
                     </router-link>
-                    <a href="javascript:;" class="btn-follow text-hide" @click="follow(river)" :class="{active: river.follow===1}">关注</a>
+                    <a href="javascript:;" class="btn-follow text-hide" @click="follow(river)"
+                       :class="{active: river.follow===1}">关注</a>
                 </li>
             </ul>
             <div class="box" v-else-if="ready"><span>暂无数据</span></div>
@@ -32,41 +33,41 @@
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
     import store from '@/vuex/allRiverList';
+    import ajax from '@/config/fetch'
 
 
     // 搜索河湖列表
-    async function getData (callback) {
+    function getData(callback) {
 
-        if(!this.pageTotal || this.pageIndex <= this.pageTotal) {
+        if (!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
-            let url = new URL('http://192.168.199.248:2001/data/river-list.json');
-            url.search = [
-                ['name', this.searchParam.name].join('='),
-                ['town', this.searchParam.town].join('='),
-                ['village', this.searchParam.village].join('='),
-                ['pageIndex', this.pageIndex++].join('='),
-                ['pageSize', this.pageSize].join('=')
-            ].join('&');
-
-            let res = await fetch(url);
-            let data = await res.json();
-
-            // 数据已经加载完成
-            this.ready = true;
-
-            callback && callback();
-
-            if(data.state === 200 && data.data.list && data.data.list.length) {
-                this.pageTotal = data.data.pageTotal;
-
-                if(Array.isArray(this.list)) {
-                    this.list = this.list.concat(data.data.list);
-                } else {
-                    this.list = data.data.list;
+            ajax.riverList({
+                param: {
+                    'name': this.searchParam.name,
+                    'town': this.searchParam.town,
+                    'village': this.searchParam.village,
+                    'pageIndex': this.pageIndex++,
+                    'pageSize': this.pageSize,
                 }
-            } else {
-                alert('没有更多数据！');
-            }
+            }).then(data => {
+                // 数据已经加载完成
+                this.ready = true;
+
+                callback && callback();
+
+                if (data.state === 200 && data.data.list && data.data.list.length) {
+                    this.pageTotal = data.data.pageTotal;
+
+                    if (Array.isArray(this.list)) {
+                        this.list = this.list.concat(data.data.list);
+                    } else {
+                        this.list = data.data.list;
+                    }
+                } else {
+                    alert('没有更多数据！');
+                }
+
+            });
 
         } else {
             callback && callback();
@@ -84,42 +85,41 @@
             'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
         },
-        created () {
-            if(!this.ready) {
+        created() {
+            if (!this.ready) {
                 getData.bind(this)();
             }
         },
-        data () {
+        data() {
             return this.$store.state;
         },
         methods: {
             getData,
 
             // 父层搜索事件
-            search () {
+            search() {
                 this.pageIndex = 1;
                 this.list = [];
                 getData.bind(this)();
             },
 
             // 点击收藏
-            async follow (river) {
+            follow(river) {
                 let follow = !(river.follow - 0) - 0;
-                let url = new URL('http://192.168.199.248:2001/data/follow-result.json');
 
-                url.search = [
-                    ['follow', follow].join('='),
-                    ['id', river.id].join('=')
-                ].join('&');
+                ajax.follow({
+                    param: {
+                        'follow': follow,
+                        'id': river.id
+                    }
+                }).then(data => {
+                    if (data.state === 200) {
+                        Vue.set(river, 'follow', follow);
+                    }
+                });
 
-                let res = await fetch(url);
-                let data = await res.json();
-
-                if(data.state === 200) {
-                    Vue.set(river, 'follow', follow);
-                }
             },
-            getWrap () {
+            getWrap() {
                 return this.$refs.wrap;
             }
         }
@@ -128,6 +128,7 @@
 
 <style lang="less" scoped>
     @import "../assets/css/base.less";
+
     .river-list {
         padding: 0 (15 / @rem);
 

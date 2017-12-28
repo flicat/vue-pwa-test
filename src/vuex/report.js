@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 
@@ -22,54 +23,56 @@ export default new Vuex.Store({
         },
 
         // 获取治水大类联动菜单
-        async getFloodType ({commit, dispatch, state}) {
-            let res = await fetch('http://192.168.199.248:2001/data/flood-linkage.json');
-            let data = await res.json();
+        getFloodType ({commit, dispatch, state}) {
 
-            // 数据已经加载完成
-            state.ready = true;
+            ajax.floodLinkage().then(data => {
+                // 数据已经加载完成
+                state.ready = true;
 
-            if(data.state === 200 && data.data) {
+                if(data.state === 200 && data.data) {
 
-                let list = data.data;
-                let flood = {};
+                    let list = data.data;
+                    let flood = {};
 
-                Object.keys(list).forEach(keys => {
+                    Object.keys(list).forEach(keys => {
 
-                    let keyArr = keys.split('-');
-                    let currentLevel = null;
-                    let currentKey = [];
+                        let keyArr = keys.split('-');
+                        let currentLevel = null;
+                        let currentKey = [];
 
-                    function * level () {
-                        let key = yield flood;
+                        function * level () {
+                            let key = yield flood;
 
-                        while (key) {
+                            while (key) {
 
-                            currentKey.push(key);
+                                currentKey.push(key);
 
-                            if(!currentLevel[key]) {
-                                currentLevel[key] = {
-                                    name: list[currentKey.join('-')],
-                                    sub: {}
-                                };
+                                if(!currentLevel[key]) {
+                                    currentLevel[key] = {
+                                        name: list[currentKey.join('-')],
+                                        sub: {}
+                                    };
+                                }
+                                key = yield currentLevel[key].sub;
                             }
-                            key = yield currentLevel[key].sub;
+
                         }
 
-                    }
+                        let it = level();
+                        currentLevel = it.next().value;
 
-                    let it = level();
-                    currentLevel = it.next().value;
+                        while (keyArr.length) {
+                            currentLevel = it.next(keyArr.shift()).value;
+                        }
 
-                    while (keyArr.length) {
-                        currentLevel = it.next(keyArr.shift()).value;
-                    }
+                    });
 
-                });
+                    state.flood = flood;
 
-                state.flood = flood;
+                }
 
-            }
+            });
+
         }
 
     }

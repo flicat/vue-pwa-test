@@ -38,26 +38,26 @@
     import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';                          // 返回顶部按钮
     import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
+    import ajax from '@/config/fetch'
 
     // 获取列表数据
-    async function getData () {
-        let url = new URL('http://www.keepsoft.cn/wxpt/weixinExposureInfoController.do');
-        url.search = [
-            'baoliaoDetail',
-            ['id', this.id].join('=')
-        ].join('&');
+    function getData () {
 
-        let res = await fetch(url);
-        let data = await res.json();
+        ajax.reportInfo({
+            param: {
+                'id': this.id
+            }
+        }).then(data => {
+            // 数据已经加载完成
+            this.ready = true;
 
-        // 数据已经加载完成
-        this.ready = true;
+            if(data.state === 200) {
+                this.userInfo = data.data.userInfo;
+                this.report = data.data.report;
+                this.feedback = data.data.feedback;
+            }
+        });
 
-        if(data.state === 200) {
-            this.userInfo = data.data.userInfo;
-            this.report = data.data.report;
-            this.feedback = data.data.feedback;
-        }
     }
 
     export default {
