@@ -48,6 +48,8 @@
 
         ajax.mapReview({
             param: {
+                'code': this.$store.state.code,
+                'appid': this.$store.state.appid,
                 'longitude': that.center[0],
                 'latitude': that.center[1],
                 'distance': 1000
