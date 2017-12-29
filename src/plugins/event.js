@@ -1,4 +1,4 @@
-/*!
+/*
  * @author liyuelong1020@gmail.com
  * @date 15-5-11 下午4:23
  * @version 1.0.0

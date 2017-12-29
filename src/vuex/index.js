@@ -1,4 +1,4 @@
-/*!
+/*
  * @author liyuelong1020@gmail.com
  * @date 2017/12/28
  * @description 全局 vuex

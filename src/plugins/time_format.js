@@ -1,4 +1,4 @@
-/*!
+/*
  * @author liyuelong1020@gmail.com
  * @date 2017/12/20
  * @description 获取时间字符串

@@ -1,4 +1,4 @@
-/*!
+/*
  * @author liyuelong1020@gmail.com
  * @date 2017/12/27
  * @description 项目配置信息

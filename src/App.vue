@@ -23,5 +23,5 @@
     }
 </script>
 
-<style src="./assets/css/normalize.css"></style>
+<style src="./assets/css/normalize.less" lang="less"></style>
 <style src="./assets/css/global.less" lang="less"></style>
