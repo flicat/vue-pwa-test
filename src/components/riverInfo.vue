@@ -22,21 +22,45 @@
                     </li>
 
                     <li class="river-item">
-                        <i class="icon icon-top-riverer"></i>
-                        <span class="label">总河长：</span>
-                        <em class="text">{{data.topRiverer.name}}｜{{data.topRiverer.title}}</em>
-                    </li>
-
-                    <li class="river-item">
-                        <i class="icon icon-vice-riverer"></i>
-                        <span class="label">副总河长：</span>
-                        <em class="text">{{data.viceRiverer.name}}｜{{data.viceRiverer.title}}</em>
-                    </li>
-
-                    <li class="river-item">
                         <i class="icon icon-riverer"></i>
                         <span class="label">河长：</span>
-                        <em class="text">{{data.riverer.name}}｜{{data.riverer.title}}</em>
+                        <em class="text">{{data.riverLeader}}｜{{data.leaderDuty}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.leaderTel">
+                        <i class="icon icon-top-riverer"></i>
+                        <span class="label">河长电话：</span>
+                        <em class="text">{{data.leaderTel}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.riverPolice">
+                        <i class="icon icon-vice-riverer"></i>
+                        <span class="label">河道警长：</span>
+                        <em class="text">{{data.riverPolice}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.policeTel">
+                        <i class="icon icon-top-riverer"></i>
+                        <span class="label">河道警长电话：</span>
+                        <em class="text">{{data.policeTel}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.contactPeople">
+                        <i class="icon icon-vice-riverer"></i>
+                        <span class="label">联系人：</span>
+                        <em class="text">{{data.contactPeople}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.contactDepartment">
+                        <i class="icon icon-top-riverer"></i>
+                        <span class="label">联系人部门：</span>
+                        <em class="text">{{data.contactDepartment}}</em>
+                    </li>
+
+                    <li class="river-item" v-if="data.contactTel">
+                        <i class="icon icon-vice-riverer"></i>
+                        <span class="label">联系人电话：</span>
+                        <em class="text">{{data.contactTel}}</em>
                     </li>
 
                     <li class="river-item">
@@ -54,7 +78,7 @@
                     <li class="river-item">
                         <i class="icon icon-river-range"></i>
                         <span class="label">河段起止：</span>
-                        <em class="text">{{data.from || '-'}}，{{data.end || '-'}}</em>
+                        <em class="text">{{data.rvBeg || '-'}}，{{data.rvEnd || '-'}}</em>
                     </li>
 
                     <li class="river-item">
@@ -203,21 +227,21 @@
         computed: {
             // 地图中点
             center () {
-                if(this.data && this.data.location) {
-                    return this.data.location.split(',')
+                if(this.data && this.data.latitude && this.data.longitude) {
+                    return [this.data.longitude, this.data.latitude]
                 } else {
                     return [0, 0];
                 }
             },
             // 河流坐标点
             marker () {
-                if(this.data && this.data.location) {
+                if(this.data && this.data.latitude && this.data.longitude) {
                     return {
-                        position: this.data.location.split(','),
+                        position: [this.data.longitude, this.data.latitude],
                         content: '<span class="river-point"></span>'
                     }
                 } else {
-                    return [0, 0];
+                    return {};
                 }
             }
         },

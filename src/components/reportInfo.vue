@@ -4,19 +4,19 @@
             <article class="flex-content" ref="wrap">
                 <template v-if="userInfo && report && feedback">
                     <div class="report-info">
-                        <img class="user-photo" :src="userInfo.headImage" />
+                        <img class="user-photo" :src="userInfo.headImage" @error="$event.target.src=require('../assets/images/icon-riverer.png')" />
                         <p class="user-name">{{userInfo.name}}</p>
                         <p class="decs">{{report.decs}}</p>
                         <p class="location pull-left">位置：{{report.location}}</p>
                         <p class="date">{{getDate(report.date)}}</p>
                     </div>
                     <div class="album" v-for="src in report.album">
-                        <img :src="src" alt="">
+                        <img :src="src" @error="$event.target.src=require('../assets/images/default.png')" alt="">
                     </div>
                     <dl class="feedback">
                         <dt class="title">处理情况：</dt>
                         <dd class="feedback-item" v-for="item in feedback" :key="item.id">
-                            <img class="user-photo" :src="item.userInfo.headImage" />
+                            <img class="user-photo" :src="item.userInfo.headImage" @error="$event.target.src=require('../assets/images/icon-riverer.png')" />
                             <p class="user-name">{{item.userInfo.name}}</p>
                             <p class="date">{{getDate(item.date)}}</p>
                             <p class="message">{{item.message}}</p>

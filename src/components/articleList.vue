@@ -9,7 +9,7 @@
                 <ul class="news-list" v-if="list && list.length">
                     <li class="news-item" v-for="item in list" :key="item.id" :class="{'no-pic': !item.album}">
                         <router-link :to="'/article-detail/' + item.id">
-                            <img :src="item.album" v-if="item.album" alt="" class="photo">
+                            <img :src="item.album" @error="$event.target.src=require('../assets/images/default.png')" v-if="item.album" alt="" class="photo">
                             <p v-if="item.title" class="title text-clip">{{item.title}}</p>
                             <p v-if="item.decs" class="decs text-clip-2">{{item.decs}}</p>
                             <p v-if="item.date" class="time text-clip">{{getDate(item.date)}}</p>

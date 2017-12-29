@@ -27,5 +27,5 @@ export default {
     report:        domain + 'report-result.json',     // 我要爆料
     riverInfo:     domain + 'river-info.json',        // 河湖详情
     riverList:     domain + 'river-list.json',        // 河湖名录搜索
-    rivererList:   domain + 'riverer-list.json',      // 河长搜索列表
+    rivererList:   domain2 + '/hehumingluController.do?getRiverUserList',            // 河长搜索列表
 };

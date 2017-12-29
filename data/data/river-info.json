@@ -1,32 +1,73 @@
 {
     "state": 200,
     "data": {
-        "id": "100001",
-        "name": "浈江大埔区段",
-        "location": "112.865569,23.951898",
-        "topRiverer": {
-            "name": "郑晓燕",
-            "title": "区书记"
-        },
-        "viceRiverer": {
-            "name": "张仁建",
-            "title": "区长"
-        },
-        "riverer": {
-            "name": "张仁建",
-            "title": "区长"
-        },
-        "cityLevel": "广州市",
-        "countyLevel": "大埔县",
-        "from": "石厘头",
-        "end": "南岗河",
-        "land": "右岸",
-        "collectingArea": "2565.468km²",
-        "length": "3.5Km",
-        "system": "北江",
-        "remarks": "无污染河涌",
-        "townId": "154451",
-        "villageId": "35461351",
-        "supRiverId": "68768435"
+        "idx": "1",
+        "code": "MJH00ROT00ROT",
+        "name": "梅江河",
+        "rvBeg": "目睡冈",
+        "rvEnd": "三河坝",
+        "length": 18.57,
+        "level": 1,
+        "distcode": "-",
+        "distname": "-",
+        "longitude": 116.541630033861,
+        "latitude": 24.4353965215911,
+        "duty": "-",
+        "coordinates": [
+            [
+                116.577088023861,
+                24.3991997115911
+            ],
+            [
+                116.576962653861,
+                24.3994789715911
+            ]
+        ],
+        "riverManagers": [
+            {
+                "idx": "1",
+                "rvCode": "AFA03000",
+                "level": 0,
+                "name": "张三",
+                "phone": "18674075926",
+                "post": "415947478@qq.com",
+                "userIdx": "146"
+            },
+            {
+                "idx": "7",
+                "rvCode": "AFA03000",
+                "level": 4,
+                "name": "周七",
+                "phone": "18674075926",
+                "post": "415947478@qq.com",
+                "userIdx": "146"
+            }
+        ],
+        "manaLevel": 0,
+        "lastGoal": "-",
+        "drainageArea": 0,
+        "riverLeader": "hz",
+        "leaderDuty": "县长",
+        "leaderTel": "-",
+        "riverPolice": "-",
+        "policeTel": "-",
+        "contactPeople": "-",
+        "contactDepartment": "-",
+        "contactTel": "-",
+        "lowerRivers": [
+            {
+                "idx": "125",
+                "lowerRiver": "梅江二级支流梓里溪",
+                "rainArea": 0
+            },
+            {
+                "idx": "193",
+                "lowerRiver": "梅江河三河镇段",
+                "lowerRiverManager": "李礼荣",
+                "rainArea": 0
+            }
+        ],
+        "riverPoliceH5": "andriod/h5/riverStrategy.html",
+        "rainArea": 0
     }
 }

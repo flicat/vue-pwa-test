@@ -4,7 +4,7 @@
             <ul v-if="list && list.length" class="river-list">
                 <li class="river-item" v-for="river in list">
                     <router-link :to="'/river-info/' + river.id">
-                        <img :src="river.thumb" alt="" class="thumb">
+                        <img :src="river.thumb" @error="$event.target.src=require('../assets/images/default.png')" alt="" class="thumb">
                         <p class="name">{{river.name}}</p>
                         <div class="label-wrap clear">
                             <span class="label area">{{river.area}}</span>

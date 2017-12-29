@@ -4,8 +4,8 @@
  * @description 正式环境URL
  */
 
-let domain = 'http://www.keepsoft.cn/wxpt';
-// let domain = 'http://conf.free.ngrok.cc';
+// let domain = 'http://www.keepsoft.cn/wxpt';
+let domain = 'http://conf.free.ngrok.cc';
 
 export default {
     areaLinkage:   domain + '/hehumingluController.do?getDistList.action',          // 地区联动菜单
@@ -20,5 +20,5 @@ export default {
     report:        domain + '/weixinNearBaoliaoController.do?doAddBaoliao',         // 我要爆料
     riverInfo:     domain + '/hehumingluController.do?getRiverDetail',              // 河湖详情
     riverList:     domain + '/hehumingluController.do?getRiverByPage',              // 河湖名录搜索
-    rivererList:   'http://192.168.199.248:2001/data/riverer-list.json',            // 河长搜索列表
+    rivererList:   domain + '/hehumingluController.do?getRiverUserList',            // 河长搜索列表
 };

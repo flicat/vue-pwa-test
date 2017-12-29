@@ -5,11 +5,13 @@
                 <ul class="report-list" v-if="list && list.length">
                     <li class="report-item" v-for="item in list" :key="item.id">
                         <router-link :to="'/report-info/' + item.id">
-                            <img class="user-photo" :src="item.userInfo ? item.userInfo.headImage : '#'" />
+                            <img class="user-photo"
+                                 :src="item.userInfo ? item.userInfo.headImage : require('../assets/images/icon-riverer.png')"
+                                 @error="$event.target.src=require('../assets/images/icon-riverer.png')" />
                             <p class="user-name">{{item.userInfo ? item.userInfo.name : ''}}</p>
                             <p class="decs">{{item.decs}}</p>
                             <p class="album clear" v-if="item.album && item.album.length">
-                                <img v-for="src in item.album" :src="src" alt="">
+                                <img v-for="src in item.album" :src="src" @error="$event.target.src=require('../assets/images/default.png')" alt="">
                             </p>
                         </router-link>
                         <div class="location-action clear">
