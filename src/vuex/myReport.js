@@ -47,7 +47,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if(data && data.state === 200) {
+                    if(data) {
                         state.userInfo = data.data.userInfo;
                         state.pageTotal= data.data.report.pageTotal;
 
@@ -56,10 +56,7 @@ export default new Vuex.Store({
                         } else {
                             state.list = data.data.report.list;
                         }
-                    } else {
-                        alert('没有更多数据！');
                     }
-
                 });
 
             } else {

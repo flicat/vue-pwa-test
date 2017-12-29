@@ -29,7 +29,7 @@ export default new Vuex.Store({
                 // 数据已经加载完成
                 state.ready = true;
 
-                if(data && data.state === 200 && data.data) {
+                if(data && data.data) {
 
                     let list = data.data;
                     let flood = {};

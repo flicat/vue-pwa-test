@@ -349,8 +349,8 @@
                             body,
                         }
                     }).then(data => {
-                        if(data && data.data && data.data.message) {
-                            alert(data.data.message);
+                        if(data && data.data) {
+                            alert(data.data);
                         }
                     });
 

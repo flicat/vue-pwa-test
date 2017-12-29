@@ -6,7 +6,6 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import ajax from '@/config/fetch'
 
 Vue.use(Vuex);
 

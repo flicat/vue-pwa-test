@@ -54,7 +54,7 @@
             }
         }).then(data => {
 
-            if (data && data.state === 200 && data.data && data.data.length) {
+            if (data && data.data && data.data.length) {
 
                 data.data.forEach(item => markers.push({
                     position: item.location.split(','),

@@ -24,6 +24,18 @@ let getData = function (name, param, option) {
 
     return fetch(urlObj, options)
         .then(res => res.json())
+        .then(data => {
+
+            if(data && data.state === 200) {
+                return data;
+            }
+
+            if(data && data.state !== 200) {
+                alert(data || '没有更多数据！');
+            }
+
+            return null;
+        })
         .catch(error => alert('接口错误：\n' + urlObj.href));
 
 };

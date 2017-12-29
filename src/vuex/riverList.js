@@ -75,7 +75,7 @@ export default new Vuex.Store({
             ajax.areaLinkage().then(data => {
                 state.ready = true;
 
-                if (data && data.state === 200 && data.data) {
+                if (data && data.data) {
 
                     let list = data.data;
                     let area = {};
@@ -163,7 +163,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if (data && data.state === 200 && data.data.list && data.data.list.length) {
+                    if (data && data.data.list && data.data.list.length) {
                         state.allRiver.pageTotal = data.data.pageTotal;
 
                         if (Array.isArray(state.allRiver.list)) {
@@ -171,8 +171,6 @@ export default new Vuex.Store({
                         } else {
                             state.allRiver.list = data.data.list;
                         }
-                    } else {
-                        alert('没有更多数据！');
                     }
 
                 });
@@ -209,7 +207,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if (data && data.state === 200 && data.data.list && data.data.list.length) {
+                    if (data && data.data.list && data.data.list.length) {
                         state.nearRiver.pageTotal = data.data.pageTotal;
 
                         if (Array.isArray(state.nearRiver.list)) {
@@ -217,8 +215,6 @@ export default new Vuex.Store({
                         } else {
                             state.nearRiver.list = data.data.list;
                         }
-                    } else {
-                        alert('没有更多数据！');
                     }
                 });
 

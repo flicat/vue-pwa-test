@@ -174,7 +174,7 @@
                 // 数据已经加载完成
                 this.ready = true;
 
-                if (data && data.state === 200) {
+                if (data) {
                     this.data = data.data;
                 }
             });
@@ -232,7 +232,7 @@
                 this.$router.replace({name: 'riverInfo', params: {id: this.data.supRiverId}});
 
                 getDate(this.data.supRiverId).then(data => {
-                    if (data && data.state === 200) {
+                    if (data) {
                         this.data = data.data;
                     }
                 });

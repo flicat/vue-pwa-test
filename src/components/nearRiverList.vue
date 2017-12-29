@@ -61,7 +61,7 @@
                         'id': river.id
                     }
                 }).then(data => {
-                    if (data && data.state === 200) {
+                    if (data) {
                         Vue.set(river, 'follow', follow);
                     }
                 });

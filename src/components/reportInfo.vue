@@ -51,7 +51,7 @@
             // 数据已经加载完成
             this.ready = true;
 
-            if(data && data.state === 200) {
+            if(data) {
                 this.userInfo = data.data.userInfo;
                 this.report = data.data.report;
                 this.feedback = data.data.feedback;

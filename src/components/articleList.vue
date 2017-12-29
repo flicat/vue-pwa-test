@@ -48,7 +48,7 @@
 
                 callback && callback();
 
-                if (data && data.state === 200) {
+                if (data) {
                     this.pageTotal = data.data.pageTotal;
 
                     if(data.data.list && data.data.list.length) {
@@ -65,8 +65,6 @@
                         document.title = data.data.columnInfo.name;
                     }
 
-                } else {
-                    alert('没有更多数据！');
                 }
 
             });

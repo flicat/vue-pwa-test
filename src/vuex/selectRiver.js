@@ -71,7 +71,7 @@ export default new Vuex.Store({
         getArea ({commit, dispatch, state}) {
 
             ajax.areaLinkage().then(data => {
-                if(data && data.state === 200 && data.data) {
+                if(data && data.data) {
 
                     let list = data.data;
                     let area = {};
@@ -136,7 +136,7 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if(data && data.state === 200 && data.data.list && data.data.list.length) {
+                    if(data && data.data.list && data.data.list.length) {
                         state.pageTotal = data.data.pageTotal;
 
                         if(Array.isArray(state.list)) {
@@ -144,8 +144,6 @@ export default new Vuex.Store({
                         } else {
                             state.list = data.data.list;
                         }
-                    } else {
-                        alert('没有更多数据！');
                     }
 
                 });
