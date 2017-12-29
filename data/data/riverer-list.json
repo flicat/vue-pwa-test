@@ -1,91 +1,26 @@
 {
     "state": 200,
     "data": {
-        "pageIndex": "1",
-        "pageSize": "10",
-        "pageTotal": "5",
-        "list": [
+        "userList": [
             {
-                "id": "100001",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
+                "uname": "张大伟",
+                "sex": "1",
+                "dname": "系统管理员",
+                "id": 185
             },
             {
-                "id": "100002",
-                "name": "陈娟",
-                "sex": "female",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100003",
-                "name": "陈莹",
-                "sex": "female",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100004",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100005",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100006",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100007",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100008",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
-            },
-            {
-                "id": "100009",
-                "name": "张庆德",
-                "sex": "male",
-                "title": "百侯村村级河长",
-                "address": "大埔县桃瑶镇百侯村",
-                "tel": "0753-45687452",
-                "email": "dabuhz@gmail.com"
+                "uname": "审核员",
+                "sex": "1",
+                "dname": "系统管理员",
+                "id": 186,
+                "tel": 1863333333,
+                "email": "186@qq.com"
             }
-        ]
-    }
+        ],
+        "count": 160,
+        "pageIndex": 1,
+        "pageSize": 10,
+        "pageTotal": 16
+    },
+    "desc": "查询河长列表成功"
 }

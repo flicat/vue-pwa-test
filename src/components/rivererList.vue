@@ -11,8 +11,8 @@
 
                     <li class="riverer-item row" v-for="riverer in list" :key="riverer.id">
                         <router-link :to="{name: 'rivererInfo', query: riverer}">
-                            <span class="label col-4" :data-title="shortName(riverer.name)">{{riverer.name}}</span>
-                            <em class="decs col-8">{{riverer.title}}</em>
+                            <span class="label col-4" :data-title="shortName(riverer.uname)"><em class="text-clip">{{riverer.uname}}</em></span>
+                            <em class="decs col-8"><em class="text-clip">{{riverer.dname}}</em></em>
                         </router-link>
                     </li>
                 </ul>
@@ -21,12 +21,12 @@
             </article>
         </section>
 
-        <div class="search-form box" v-show="showSearch">
-            <div class="search-top row">
+        <div class="search-form box" v-show="showSearch" @click="showSearch=!showSearch">
+            <div class="search-top row" @click.stop="">
                 <h3 class="title pull-left">筛选查询</h3>
                 <button class="pull-right btn-close text-hide" @click="showSearch=!showSearch">取消</button>
             </div>
-            <div class="flex">
+            <div class="flex" @click.stop="">
                 <div class="flex-content">
                     <div class="form-control">
                         <label class="title">1.名字</label>
@@ -60,10 +60,10 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-control">
-                        <button class="btn-submit" @click="search">确定</button>
-                    </div>
                 </div>
+            </div>
+            <div class="btn-wrap" @click.stop="">
+                <button class="btn-submit" @click="search">确定</button>
             </div>
         </div>
 
@@ -197,6 +197,11 @@
                 color: #acacac;
                 font-style: normal;
             }
+
+            em {
+                font-style: normal;
+                display: block;
+            }
         }
     }
 
@@ -312,6 +317,13 @@
                 }
             }
 
+        }
+        .btn-wrap {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 1rem (15 / @rem);
+            background-color: #fff;
+
             .btn-submit {
                 display: block;
                 width: 100%;
@@ -324,8 +336,8 @@
                 border: 0 none;
                 background: #0168b7;
                 border-radius: 5px;
-                margin-top: 4em;
             }
         }
+
     }
 </style>

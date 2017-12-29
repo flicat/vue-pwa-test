@@ -65,15 +65,15 @@
 
                     <li class="river-item">
                         <i class="icon icon-city-level"></i>
-                        <span class="label">市级：</span>
-                        <em class="text">{{data.cityLevel || '-'}}</em>
+                        <span class="label">级别：</span>
+                        <em class="text">{{level}}</em>
                     </li>
 
-                    <li class="river-item">
-                        <i class="icon icon-county-level"></i>
-                        <span class="label">县级：</span>
-                        <em class="text">{{data.countyLevel || '-'}}</em>
-                    </li>
+                    <!--<li class="river-item">-->
+                        <!--<i class="icon icon-county-level"></i>-->
+                        <!--<span class="label">县级：</span>-->
+                        <!--<em class="text">{{data.countyLevel || '-'}}</em>-->
+                    <!--</li>-->
 
                     <li class="river-item">
                         <i class="icon icon-river-range"></i>
@@ -81,16 +81,16 @@
                         <em class="text">{{data.rvBeg || '-'}}，{{data.rvEnd || '-'}}</em>
                     </li>
 
-                    <li class="river-item">
-                        <i class="icon icon-river-land"></i>
-                        <span class="label">岸别：</span>
-                        <em class="text">{{data.land || '-'}}</em>
-                    </li>
+                    <!--<li class="river-item">-->
+                        <!--<i class="icon icon-river-land"></i>-->
+                        <!--<span class="label">岸别：</span>-->
+                        <!--<em class="text">{{data.land || '-'}}</em>-->
+                    <!--</li>-->
 
                     <li class="river-item">
                         <i class="icon icon-collecting-area"></i>
                         <span class="label">河流集雨面积：</span>
-                        <em class="text">{{data.collectingArea || '-'}}</em>
+                        <em class="text">{{data.rainArea || '-'}}㎡</em>
                     </li>
 
                     <li class="river-item">
@@ -99,17 +99,17 @@
                         <em class="text">{{data.length || '-'}}</em>
                     </li>
 
-                    <li class="river-item">
-                        <i class="icon icon-river-system"></i>
-                        <span class="label">水系：</span>
-                        <em class="text">{{data.system || '-'}}</em>
-                    </li>
+                    <!--<li class="river-item">-->
+                        <!--<i class="icon icon-river-system"></i>-->
+                        <!--<span class="label">水系：</span>-->
+                        <!--<em class="text">{{data.system || '-'}}</em>-->
+                    <!--</li>-->
 
-                    <li class="river-item">
-                        <i class="icon icon-river-remarks"></i>
-                        <span class="label">备注：</span>
-                        <em class="text">{{data.remarks || '-'}}</em>
-                    </li>
+                    <!--<li class="river-item">-->
+                        <!--<i class="icon icon-river-remarks"></i>-->
+                        <!--<span class="label">备注：</span>-->
+                        <!--<em class="text">{{data.remarks || '-'}}</em>-->
+                    <!--</li>-->
 
                 </ul>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
@@ -117,12 +117,12 @@
             </article>
         </section>
 
-        <div v-show="showSearch" class="search-form box">
-            <div class="search-top row">
+        <div v-show="showSearch" class="search-form box" @click="showSearch=!showSearch">
+            <div class="search-top row" @click.stop="">
                 <h3 class="title pull-left">筛选查询</h3>
                 <button class="pull-right btn-close text-hide" @click="showSearch=!showSearch">取消</button>
             </div>
-            <div class="flex">
+            <div class="flex" @click.stop="">
                 <div class="flex-content" v-if="data">
                     <div class="form-control">
                         <button @click="sameLevel" class="btn-same-level">同级</button>
@@ -242,6 +242,12 @@
                     }
                 } else {
                     return {};
+                }
+            },
+            // 河流等级
+            level () {
+                if(this.data && this.data.manaLevel) {
+                    return ['', '区管','镇管', '村管'][Number(this.data.manaLevel)]
                 }
             }
         },

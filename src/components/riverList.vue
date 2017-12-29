@@ -8,12 +8,12 @@
 
         <component :is="tabType"></component>
 
-        <div v-show="showSearch" class="search-form box">
-            <div class="search-top row">
+        <div v-show="showSearch" class="search-form box" @click="showSearch=!showSearch">
+            <div class="search-top row" @click.stop="">
                 <h3 class="title pull-left">筛选查询</h3>
                 <button class="pull-right btn-close text-hide" @click="showSearch=!showSearch">取消</button>
             </div>
-            <div class="flex">
+            <div class="flex" @click.stop="">
                 <div class="flex-content">
                     <div class="form-control">
                         <label class="title">1.河流名称</label>
@@ -47,10 +47,10 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-control">
-                        <button class="btn-submit" @click="search">确定</button>
-                    </div>
                 </div>
+            </div>
+            <div class="btn-wrap" @click.stop="">
+                <button class="btn-submit" @click="search">确定</button>
             </div>
         </div>
 
@@ -254,6 +254,13 @@
                     border-radius: 5px;
                 }
             }
+        }
+
+        .btn-wrap {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 1rem (15 / @rem);
+            background-color: #fff;
 
             .btn-submit {
                 display: block;
@@ -267,8 +274,8 @@
                 border: 0 none;
                 background: #0168b7;
                 border-radius: 5px;
-                margin-top: 4em;
             }
         }
+
     }
 </style>

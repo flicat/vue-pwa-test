@@ -8,7 +8,7 @@
 let domain = 'http://conf.free.ngrok.cc';
 
 export default {
-    areaLinkage:   domain + '/hehumingluController.do?getDistList.action',          // 地区联动菜单
+    areaLinkage:   domain + '/hehumingluController.do?getDistList',          // 地区联动菜单
     articleDetail: domain + '/cmsArticleController.do?cmsArticleDetail',            // 文章详情
     articleList:   domain + '/cmsArticleController.do?cmsArticleList',              // 文章列表
     floodLinkage:  domain + '/weixinNearBaoliaoController.do?getDealInfos',         // 治水大类联动菜单

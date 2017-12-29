@@ -137,13 +137,13 @@ export default new Vuex.Store({
 
                     callback && callback();
 
-                    if(data && data.data.list && data.data.list.length) {
+                    if(data && data.data.userList && data.data.userList.length) {
                         state.pageTotal = data.data.pageTotal;
 
                         if(Array.isArray(state.list)) {
-                            state.list = state.list.concat(data.data.list);
+                            state.list = state.list.concat(data.data.userList);
                         } else {
-                            state.list = data.data.list;
+                            state.list = data.data.userList;
                         }
                     }
 

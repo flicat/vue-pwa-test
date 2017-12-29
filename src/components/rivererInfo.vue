@@ -3,14 +3,14 @@
         <section class="flex">
             <div class="flex-content">
                 <div class="riverer-info">
-                    <p class="name" :data-title="shortName(name)">{{name}}<i class="icon-sex" :class="[sex]"></i></p>
-                    <p class="title">{{title}}</p>
+                    <p class="name" :data-title="shortName(uname)">{{uname}}<i class="icon-sex" :class="[sexName]"></i></p>
+                    <p class="title">{{dname}}</p>
                 </div>
                 <ul class="contact">
-                    <li class="contact-item">
-                        <p class="label address">住址</p>
-                        <p class="content">{{address}}</p>
-                    </li>
+                    <!--<li class="contact-item">-->
+                        <!--<p class="label address">住址</p>-->
+                        <!--<p class="content">{{address}}</p>-->
+                    <!--</li>-->
                     <li class="contact-item">
                         <p class="label tel">办公电话</p>
                         <p class="content">{{tel}}</p>
@@ -30,6 +30,11 @@
         name: 'rivererInfo',
         data () {
             return this.$route.query;
+        },
+        computed: {
+            sexName () {
+                return ['female', 'male'][Number(this.sex)]
+            }
         },
         methods: {
             // 名字截取
