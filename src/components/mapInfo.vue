@@ -59,11 +59,11 @@
             if (data && data.data && data.data.length) {
 
                 data.data.forEach(item => markers.push({
-                    position: item.location.split(','),
+                    position: [item.longitude, item.latitude],
                     content: '<a href="javascript:;" class="btn-map-report"></a>',
                     events: {
                         click() {
-                            that.$router.push({name: 'reportInfo', params: {id: item.reportId}})
+                            that.$router.push({name: 'reportInfo', params: {id: item.id}})
                         }
                     }
                 }));

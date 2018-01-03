@@ -60,7 +60,7 @@
                 <div class="form-group row">
                     <label class="col-4 control-label">治水子类</label>
                     <div class="form-control select-control col-8">
-                        <p class="label">{{subFlood && floodSubType ? subFlood[floodSubType].name : '请选择（必填）'}}</p>
+                        <p class="label">{{subFlood && floodSubType && subFlood[floodSubType]? subFlood[floodSubType].name : '请选择（必填）'}}</p>
                         <select name="river" v-model="floodSubType">
                             <option value="" disabled>请选择</option>
                             <option v-for="id in subFloodList" :value="id">{{subFlood[id].name}}</option>
@@ -327,9 +327,6 @@
 
                 if(this.validate()) {
 
-                    let headers = new Headers();
-                    headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
                     let body = new FormData();
 
                     body.append('id', this.id);
@@ -345,7 +342,6 @@
                     ajax.report({
                         option: {
                             method: 'POST',
-                            headers,
                             body,
                         }
                     }).then(data => {
