@@ -70,8 +70,8 @@
         created () {
             this.$store.dispatch('init');
 
-            this.searchParam.town = this.$route.query.town;
-            this.searchParam.village = this.$route.query.village;
+            this.searchParam.town = this.$route.query.town || '';
+            this.searchParam.village = this.$route.query.village || '';
 
             if(this.searchParam.town || this.searchParam.village) {
                 this.$store.dispatch('search');

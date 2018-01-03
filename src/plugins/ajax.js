@@ -25,26 +25,31 @@ let getQueryStr = function(data) {
     let str = [];
     data = data || {};
 
-    let eachArrParam = function(i, item) {
-        i += '[]';
-        item.forEach(function(subItem) {
-            if(Array.isArray(subItem)) {
-                eachArrParam(i, subItem);
+    let eachArrParam = function(key, arr) {
+        key += '[]';
+        arr.forEach(function(item) {
+            if(Array.isArray(item)) {
+                eachArrParam(key, item);
             } else {
-                str.push([i, subItem].join('='));
+                str.push([key, encodeURIComponent(item)].join('='));
             }
         });
     };
 
-    forEachIn(data, function(i, item) {
-        if(Array.isArray(item)) {
-            eachArrParam(i, item);
+    forEachIn(data, function(key, value) {
+        if(Array.isArray(value)) {
+            eachArrParam(key, value);
         } else {
-            str.push([i, item].join('='));
+            str.push([key, encodeURIComponent(value)].join('='));
         }
     });
 
-    return str.join('&');
+    if(str.length) {
+        return str.join('&');
+    } else {
+        return void(0);
+    }
+
 };
 
 /**
@@ -54,7 +59,9 @@ let getQueryStr = function(data) {
  * @description 拼接 get 请求 url
  */
 let getQueryUrl = function(url, data) {
-    return [url, getQueryStr(data)].join(/\?/ig.test(url) ? '&' : '?');
+    return [url, getQueryStr(data)]
+        .filter(item => !!item)
+        .join(/\?/ig.test(url) ? '&' : '?');
 };
 
 // 根据格式返回数据
@@ -325,22 +332,22 @@ let jsonp = function(param) {
  * @description Ajax 请求设置
  */
 let options = {
-    type: 'GET',               // 请求类型
-    url: '',                   // 请求url
-    async: true,               // 默认异步请求
-    timeout: null,             // 请求超时
-    data: {},                  // 请求参数
-    header: {                  // 默认头信息
-        'Content-Type': 'application/x-www-form-urlencoded'
+    type: 'GET',                    // 请求类型
+    url: '',                        // 请求url
+    async: true,                    // 默认异步请求
+    timeout: null,                  // 请求超时
+    data: {},                       // 请求参数
+    header: {                       // 默认头信息
+        // 'Content-Type': 'application/x-www-form-urlencoded'
     },
-    dataType: '',              // 获取的数据类型
-    jsonp: '',                 // jsonp
-    cache: null,               // 使用缓存时回调
-    beforeSend: function() {}, // 请求发送前回调
-    success: function() {},    // 成功回调
-    error: function() {},       // 失败回调
-    complete: function() {},    // 请求结束后回调（无论失败与否）
-    progress: null              // 进度回调
+    dataType: '',                   // 获取的数据类型
+    jsonp: '',                      // jsonp
+    cache: null,                    // 使用缓存时回调
+    progress: null,                 // 进度回调
+    beforeSend: function() {},      // 请求发送前回调
+    success: function() {},         // 成功回调
+    error: function() {},           // 失败回调
+    complete: function() {}         // 请求结束后回调（无论失败与否）
 };
 
 /**
@@ -357,14 +364,11 @@ let options = {
  * @description Ajax 请求
  */
 export default function(option) {
-    forEachIn(options, function(key, value) {
-        if(!option[key]){
-            option[key] = value;
-        }
-    });
+    let param = Object.assign({}, options, option);
+
     if(option.dataType === 'jsonp'){
-        return jsonp(option);
+        return jsonp(param);
     } else {
-        return ajax(option);
+        return ajax(param);
     }
 }
