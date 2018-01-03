@@ -324,23 +324,28 @@
 
             // 点击提交爆料
             submit() {
+                let that = this;
 
-                if(this.validate()) {
+                if(that.validate()) {
 
                     let data = new FormData();
 
-                    data.append('id', this.id);
-                    data.append('location', this.location);
-                    data.append('location_info', this.location_info);
-                    data.append('reporter', this.reporter);
-                    data.append('phone', this.phone);
-                    data.append('floodType', this.floodType);
-                    data.append('floodSubType', this.floodSubType);
-                    data.append('description', this.description);
-                    [...this.picture.values()].forEach(file => data.append('picture[]', file));
+                    data.append('id', that.id);
+                    data.append('location', that.location);
+                    data.append('location_info', that.location_info);
+                    data.append('reporter', that.reporter);
+                    data.append('phone', that.phone);
+                    data.append('floodType', that.floodType);
+                    data.append('floodSubType', that.floodSubType);
+                    data.append('description', that.description);
+                    [...that.picture.values()].forEach(file => data.append('picture[]', file));
 
                     ajax.report({
                         type: 'POST',
+                        upload (event) {
+                            let rate = event.loaded / event.total;
+                            that.$emit('progress', rate);
+                        },
                         data,
                     }).then(data => {
                         if(data && data.data) {

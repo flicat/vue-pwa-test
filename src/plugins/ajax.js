@@ -16,6 +16,10 @@ let forEachIn = function(object, callback) {
     Object.keys(object).forEach(key => callback(key, object[key]));
 };
 
+let isType = function(target) {
+    return ({}).toString.call(target).match(/\s+(\w+)/)[1];
+};
+
 /**
  * @param {Object} data
  * @return {String}
@@ -78,86 +82,86 @@ let getDataByType = function(data, type) {
 };
 
 // 根据参数和请求地址生成缓存key
-let getCacheKey = function(param) {
-    let name = String(param.url);
-    let key_arr = [];
-
-    if(({}).toString.call(param.data) === '[object Object]'){
-        forEachIn(param.data, function(key, value) {
-            key_arr.push(key + '=' + String(value));
-        });
-
-        key_arr.sort();
-    }
-
-    return name + '?' + key_arr.join('&');
-};
+// let getCacheKey = function(param) {
+//     let name = String(param.url);
+//     let key_arr = [];
+//
+//     if(isType(param.data) === 'Object'){
+//         forEachIn(param.data, function(key, value) {
+//             key_arr.push(key + '=' + String(value));
+//         });
+//
+//         key_arr.sort();
+//     }
+//
+//     return name + '?' + key_arr.join('&');
+// };
 
 // 缓存方法
-let cache = (function() {
-    let ls = localStorage,
-        cache_name = '__ajax_cache__',
-        cacheData = [];
-
-    try{
-        cacheData = JSON.parse(ls[cache_name]);
-    } catch(e) {
-        cacheData = [];
-    }
-
-    if(({}).toString.call(cacheData) !== '[object Array]') {
-        cacheData = [];
-    }
-
-    let getData = function(id) {
-        for(let i = 0, len = cacheData.length; i < len; i++){
-            if(cacheData[i].id == id && cacheData[i].value){
-                return cacheData[i];
-            }
-        }
-    };
-
-    return {
-
-        // 根据ajax参数返回缓存值
-        get_cache: function(id) {
-            let data = getData(id);
-            return data ? data.value : '';
-        },
-
-        // 设置缓存值
-        set_cache: function(id, value) {
-            let data = getData(id), isModify = true;
-
-
-            if(!data){
-                data = {
-                    id: id
-                };
-                cacheData.push(data);
-            }
-
-            try{
-
-                let newValue = JSON.stringify(value);
-                // 判断数据是否变更
-                isModify = !(newValue === data.value);
-
-                // 如果返回的结果跟缓存不一致则替换旧缓存
-                if(isModify){
-                    data.value = newValue;
-                    ls.setItem(cache_name, JSON.stringify(cacheData));
-                }
-
-            } catch(e) {
-                console.error(e);
-            }
-
-            return isModify;
-
-        }
-    };
-})();
+// let cache = (function() {
+//     let ls = localStorage,
+//         cache_name = '__ajax_cache__',
+//         cacheData = [];
+//
+//     try{
+//         cacheData = JSON.parse(ls[cache_name]);
+//     } catch(e) {
+//         cacheData = [];
+//     }
+//
+//     if(Object(cacheData) !== 'Array') {
+//         cacheData = [];
+//     }
+//
+//     let getData = function(id) {
+//         for(let i = 0, len = cacheData.length; i < len; i++){
+//             if(cacheData[i].id == id && cacheData[i].value){
+//                 return cacheData[i];
+//             }
+//         }
+//     };
+//
+//     return {
+//
+//         // 根据ajax参数返回缓存值
+//         get_cache: function(id) {
+//             let data = getData(id);
+//             return data ? data.value : '';
+//         },
+//
+//         // 设置缓存值
+//         set_cache: function(id, value) {
+//             let data = getData(id), isModify = true;
+//
+//
+//             if(!data){
+//                 data = {
+//                     id: id
+//                 };
+//                 cacheData.push(data);
+//             }
+//
+//             try{
+//
+//                 let newValue = JSON.stringify(value);
+//                 // 判断数据是否变更
+//                 isModify = !(newValue === data.value);
+//
+//                 // 如果返回的结果跟缓存不一致则替换旧缓存
+//                 if(isModify){
+//                     data.value = newValue;
+//                     ls.setItem(cache_name, JSON.stringify(cacheData));
+//                 }
+//
+//             } catch(e) {
+//                 console.error(e);
+//             }
+//
+//             return isModify;
+//
+//         }
+//     };
+// })();
 
 /**
  * @param {options} param
@@ -181,7 +185,8 @@ let ajax = function(param) {
             }
 
             if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
-                let data, isModify = true;
+                let data;
+                // let isModify = true;
                 try {
                     data = xhr.response || xhr.responseText;
                 } catch (e) {
@@ -193,14 +198,14 @@ let ajax = function(param) {
                 }
 
                 // 如果使用缓存则保存到缓存中
-                if(typeof param.cache === "function") {
-                    isModify = cache.set_cache(cacheId, data);
-                }
+                // if(typeof param.cache === "function") {
+                //     isModify = cache.set_cache(cacheId, data);
+                // }
 
                 // 如果缓存数据有变化则调用  success 方法
-                if(isModify){
+                // if(isModify){
                     param.success(data);
-                }
+                // }
 
             } else {
                 param.error(xhr);
@@ -210,17 +215,22 @@ let ajax = function(param) {
         }
     };
 
-    // 加载事件
-    xhr.onprogress = param.progress;
+    try {
+        // 下载进度事件
+        xhr.onprogress = param.download;
+        // 上传进度事件
+        xhr.upload.onprogress = param.upload;
+    } catch(e) {}
 
-    if(({}).toString.call(param.data) === '[object FormData]') {
+
+    if(/^(ArrayBuffer|Blob|Document|FormData)$/i.test(isType(param.data))) {
         // 如果使用FormData提交数据
         param.type = 'POST';
         postData = param.data;
     } else if(String(param.type).toLowerCase() === 'post'){
         // 如果请求方式为 POST
         param.type = 'POST';
-        postData = getQueryStr(param.data);
+        postData = isType(param.data) === 'Object' ? getQueryStr(param.data) : param.data;
     } else {
         // 如果请求方式为 GET
         param.type = 'GET';
@@ -267,18 +277,18 @@ let ajax = function(param) {
     xhr.send(postData);
 
     // 如果有缓存则使用缓存
-    if(typeof param.cache === "function") {
-        // 缓存id
-        cacheId = getCacheKey(param);
-
-        let cacheData = getDataByType(cache.get_cache(cacheId), param.dataType);
-
-        if(cacheData){
-            setTimeout(function() {
-                param.cache(cacheData);
-            }, 0);
-        }
-    }
+    // if(typeof param.cache === "function") {
+    //     // 缓存id
+    //     cacheId = getCacheKey(param);
+    //
+    //     let cacheData = getDataByType(cache.get_cache(cacheId), param.dataType);
+    //
+    //     if(cacheData){
+    //         setTimeout(function() {
+    //             param.cache(cacheData);
+    //         }, 0);
+    //     }
+    // }
 
     return xhr;
 };
@@ -342,8 +352,9 @@ let options = {
     },
     dataType: '',                   // 获取的数据类型
     jsonp: '',                      // jsonp
-    cache: null,                    // 使用缓存时回调
-    progress: null,                 // 进度回调
+    // cache: null,                    // 使用缓存时回调
+    download: null,                 // 下载进度事件
+    upload: null,                   // 上传进度事件
     beforeSend: function() {},      // 请求发送前回调
     success: function() {},         // 成功回调
     error: function() {},           // 失败回调

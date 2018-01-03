@@ -27,7 +27,7 @@ Object.keys(url).forEach(name => {
                     if(data && data.state === 200) {
                         resolve(data);
                     } else {
-                        reject(data ? data.message : '没有更多数据！');
+                        reject(data && data.message ? data.message : '没有更多数据！');
                     }
                 },
 

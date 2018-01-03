@@ -195,28 +195,39 @@ export default new Vuex.Store({
 
             if (!state.nearRiver.pageTotal || state.nearRiver.pageIndex <= state.nearRiver.pageTotal) {
 
-                ajax.nearbyRiver({
-                    data: {
-                        'pageIndex': state.nearRiver.pageIndex++,
-                        'pageSize': state.nearRiver.pageSize
-                    }
-                }).then(data => {
+                navigator.geolocation.getCurrentPosition(function (pos) {
+                    let crd = pos.coords;
 
-                    // 数据已经加载完成
-                    state.nearRiver.ready = true;
-
-                    callback && callback();
-
-                    if (data && data.data.list && data.data.list.length) {
-                        state.nearRiver.pageTotal = data.data.pageTotal;
-
-                        if (Array.isArray(state.nearRiver.list)) {
-                            state.nearRiver.list = state.nearRiver.list.concat(data.data.list);
-                        } else {
-                            state.nearRiver.list = data.data.list;
+                    ajax.nearbyRiver({
+                        data: {
+                            'range': 5000,
+                            'lng': '24.347783',
+                            'lat': '116.695195'
                         }
-                    }
+                    }).then(data => {
+
+                        // 数据已经加载完成
+                        state.nearRiver.ready = true;
+
+                        callback && callback();
+
+                        if (data && data.data.list && data.data.list.length) {
+                            state.nearRiver.pageTotal = data.data.pageTotal;
+
+                            if (Array.isArray(state.nearRiver.list)) {
+                                state.nearRiver.list = state.nearRiver.list.concat(data.data.list);
+                            } else {
+                                state.nearRiver.list = data.data.list;
+                            }
+                        }
+                    });
+
+                }, function () {}, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
                 });
+
 
             } else {
                 callback && callback();

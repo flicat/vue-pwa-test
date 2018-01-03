@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from '@/vuex';
 
 Vue.config.productionTip = false;
 
@@ -10,23 +11,21 @@ Vue.config.productionTip = false;
 /* eslint-disable no-new */
 let VM = new Vue({
     el: '#app',
+    store,
     router,
-    data: {
-        showLoading: false         // 页面切换全局loading
-    },
-    template: '<App :loading="showLoading"/>',
+    template: '<App/>',
     components: {App}
 });
 
 // 设置页面标题
 router.beforeEach((to, from, next) => {
-    VM.showLoading = true;
+    VM.$store.commit('loading', true);
     next();
 });
 
 router.afterEach ((to, from) => {
     document.title = `${to.meta.title}`;
-    VM.showLoading = false;
+    VM.$store.commit('loading', false);
 });
 
 
