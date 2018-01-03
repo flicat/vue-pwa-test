@@ -5,46 +5,57 @@
  */
 
 import url from './localUrl'
+import ajax from '../plugins/ajax'
+import router from '../router'
 
-let getData = function (name, param, option) {
-    let urlObj = new (URL || webkitURL)(url[name]);
-    let options = Object.assign({
-        method: 'GET'
-    }, option);
+let requestList = new Set();
 
-    if(options.method === 'GET' && param) {
-        let queryStr = Object.keys(param).map(key => [key, param[key]].join('=')).join('&');
+let getData = function (url, param) {
 
-        if(urlObj.search) {
-            urlObj.search += `&${queryStr}`;
-        } else {
-            urlObj.search = queryStr;
-        }
-    }
+    return new Promise(function (resolve, reject) {
+        let xhr = ajax(Object.assign({
+            type: 'GET',               // 请求类型
+            url: url,                   // 请求url
+            async: true,               // 默认异步请求
+            timeout: 10000,             // 请求超时
+            dataType: 'json',              // 获取的数据类型
 
-    return fetch(urlObj, options)
-        .then(res => res.json())
-        .then(data => {
+            success (data) {
+                if(data && data.state === 200) {
+                    resolve(data);
+                }
+                if(data && data.state !== 200) {
+                    reject(data.data || '没有更多数据！');
+                }
+            },
 
-            if(data && data.state === 200) {
-                return data;
+            error () {
+                reject('接口错误：\n' + url)
+            },
+
+            complete () {
+                requestList.delete(xhr);
             }
 
-            if(data && data.state !== 200) {
-                alert(data || '没有更多数据！');
-            }
+        }, param));
 
-            return null;
-        })
-        .catch(error => alert('接口错误：\n' + urlObj.href));
-
+        requestList.add(xhr);
+    });
 };
 
 let fetchMethod = {};
 Object.keys(url).forEach(name => {
-    fetchMethod[name] = function ({param, option} = {}) {
-        return getData(name, param, option);
+    fetchMethod[name] = function (param) {
+        return getData(url[name], param);
     }
+});
+
+// 中断 ajax 请求
+router.beforeEach((to, from, next) => {
+    for(let xhr of requestList){
+        xhr.abort();
+    }
+    next();
 });
 
 // 地区联动菜单

@@ -150,7 +150,7 @@ export default new Vuex.Store({
             if (!state.allRiver.pageTotal || state.allRiver.pageIndex <= state.allRiver.pageTotal) {
 
                 ajax.riverList({
-                    param: {
+                    data: {
                         'name': state.searchParam.name,
                         'town': state.searchParam.town,
                         'village': state.searchParam.village,
@@ -196,7 +196,7 @@ export default new Vuex.Store({
             if (!state.nearRiver.pageTotal || state.nearRiver.pageIndex <= state.nearRiver.pageTotal) {
 
                 ajax.nearbyRiver({
-                    param: {
+                    data: {
                         'pageIndex': state.nearRiver.pageIndex++,
                         'pageSize': state.nearRiver.pageSize
                     }

@@ -47,7 +47,7 @@
         let markers = [];
 
         ajax.mapReview({
-            param: {
+            data: {
                 'code': this.$store.state.code,
                 'appid': this.$store.state.appid,
                 'longitude': that.center[0],

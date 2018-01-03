@@ -33,7 +33,7 @@ export default new Vuex.Store({
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
                 ajax.reportList({
-                    param: {
+                    data: {
                         code: state.Global.code,
                         appid: state.Global.appid,
                         functionType: 1,

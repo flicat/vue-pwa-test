@@ -327,23 +327,21 @@
 
                 if(this.validate()) {
 
-                    let body = new FormData();
+                    let data = new FormData();
 
-                    body.append('id', this.id);
-                    body.append('location', this.location);
-                    body.append('location_info', this.location_info);
-                    body.append('reporter', this.reporter);
-                    body.append('phone', this.phone);
-                    body.append('floodType', this.floodType);
-                    body.append('floodSubType', this.floodSubType);
-                    body.append('description', this.description);
-                    [...this.picture.values()].forEach(file => body.append('picture[]', file));
+                    data.append('id', this.id);
+                    data.append('location', this.location);
+                    data.append('location_info', this.location_info);
+                    data.append('reporter', this.reporter);
+                    data.append('phone', this.phone);
+                    data.append('floodType', this.floodType);
+                    data.append('floodSubType', this.floodSubType);
+                    data.append('description', this.description);
+                    [...this.picture.values()].forEach(file => data.append('picture[]', file));
 
                     ajax.report({
-                        option: {
-                            method: 'POST',
-                            body,
-                        }
+                        type: 'POST',
+                        data,
                     }).then(data => {
                         if(data && data.data) {
                             alert(data.data);

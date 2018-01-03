@@ -44,7 +44,7 @@
     function getData () {
 
         ajax.reportInfo({
-            param: {
+            data: {
                 'id': this.id
             }
         }).then(data => {

@@ -180,7 +180,7 @@
     function getDate (id) {
         // 获取数据
         return ajax.riverInfo({
-            param: {
+            data: {
                 id
             }
         });

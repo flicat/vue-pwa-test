@@ -28,7 +28,7 @@
         created () {
 
             ajax.articleDetail({
-                param: {
+                data: {
                     articleId: this.id
                 }
             }).then(data => {

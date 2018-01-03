@@ -37,7 +37,7 @@
         if (!this.pageTotal || this.pageIndex <= this.pageTotal) {
 
             ajax.articleList({
-                param: {
+                data: {
                     'columnId': this.id,
                     'pageIndex': this.pageIndex++,
                     'pageSize': this.pageSize

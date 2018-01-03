@@ -56,7 +56,7 @@
                 let follow = !(river.follow - 0) - 0;
 
                 ajax.follow({
-                    param: {
+                    data: {
                         'follow': follow,
                         'id': river.id
                     }

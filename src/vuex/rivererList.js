@@ -123,7 +123,7 @@ export default new Vuex.Store({
             if(!state.pageTotal || state.pageIndex <= state.pageTotal) {
 
                 ajax.rivererList({
-                    param: {
+                    data: {
                         name: state.searchParam.name,
                         town: state.searchParam.town,
                         village: state.searchParam.village,
