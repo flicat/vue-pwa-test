@@ -4,8 +4,8 @@
  * @description 正式环境URL
  */
 
-// let domain = 'http://www.keepsoft.cn/wxpt';
-let domain = 'http://conf.free.ngrok.cc';
+let domain = 'http://www.keepsoft.cn/wxpt';
+// let domain = 'http://conf.free.ngrok.cc';
 
 export default {
     areaLinkage:   domain + '/hehumingluController.do?getDistList',          // 地区联动菜单 done

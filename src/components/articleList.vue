@@ -38,6 +38,7 @@
                 data: {
                     code: this.$store.state.code,
                     appid: this.$store.state.appid,
+                    accountId: this.$route.query.accountId || '',
                     columnId: this.id,
                     pageIndex: this.pageIndex++,
                     pageSize: this.pageSize
