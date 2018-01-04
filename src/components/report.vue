@@ -113,13 +113,12 @@
             </div>
         </div>
 
-        <select-river v-if="showRiver" @select="setRiver" class="river-layer"></select-river>
+        <select-river v-if="showRiver" @select="setRiver" @loading="loading" class="river-layer"></select-river>
     </div>
 </template>
 
 <script>
     import Vue from 'vue';
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import selectRiver from './selectRiver';             // 河道选择
     import browserMd5File from 'browser-md5-file';             // 获取文件MD5
     import AMap from 'vue-amap';
@@ -154,8 +153,7 @@
         name: 'report',
         store,
         components: {
-            'full-loading': FullLoading,               // loading遮罩
-            'select-river': selectRiver               // loading遮罩
+            'select-river': selectRiver               // 所有河流
         },
         created () {
             this.$store.dispatch('init');
@@ -357,6 +355,10 @@
                     });
 
                 }
+            },
+
+            loading (isShow) {
+                this.$emit('loading', isShow);
             }
         }
     }

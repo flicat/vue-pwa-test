@@ -8,22 +8,25 @@
             <article v-html="data.content"></article>
         </template>
         <div class="box" v-else-if="ready"><span>暂无数据</span></div>
-        <full-loading v-else></full-loading>
         <go-top :wrap="getWrap"></go-top>
     </div>
 </template>
 
 <script>
     import goTop from '@/widget/goTop';
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import ajax from '@/config/fetch'
 
     export default {
         name: 'articleList',
         props: ['id'],
         components: {
-            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
+        },
+        beforeMount () {
+            this.$emit('loading', !(this.data || this.ready));
+        },
+        updated () {
+            this.$emit('loading', !(this.data || this.ready));
         },
         created () {
 

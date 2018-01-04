@@ -38,11 +38,11 @@
             'loading': Loading,
             'go-top': goTop
         },
-        beforeCreate () {
-            this.$emit('loading', true);
+        beforeMount () {
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
         },
         updated () {
-            this.$emit('loading', !(this.list && this.list.length && this.ready));
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
         },
         created() {
             this.$store.dispatch('initNear');

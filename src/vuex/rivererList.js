@@ -60,6 +60,7 @@ export default new Vuex.Store({
             state.list = [];
             state.showSearch = false;
             state.pageIndex = 1;
+            state.ready = false;
 
             dispatch('getData');
         },

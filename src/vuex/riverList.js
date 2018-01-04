@@ -145,6 +145,7 @@ export default new Vuex.Store({
 
         search({commit, dispatch, state}) {
             state.allRiver.pageIndex = 1;
+            state.allRiver.ready = false;
             state.allRiver.list = [];
             state.tabType = 'all';
             state.showSearch = false;

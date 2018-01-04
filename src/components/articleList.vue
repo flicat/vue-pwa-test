@@ -17,7 +17,6 @@
                     </li>
                 </ul>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
-                <full-loading v-else></full-loading>
             </div>
         </section>
         <loading @load="getData" :wrap="getWrap"></loading>
@@ -27,7 +26,6 @@
 
 <script>
     import Loading from '@/widget/loading';
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';
     import ajax from '@/config/fetch'
 
@@ -83,8 +81,13 @@
         props: ['id'],
         components: {
             'loading': Loading,
-            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
+        },
+        beforeMount () {
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
+        },
+        updated () {
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
         },
         created: getData,
         data() {

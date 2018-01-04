@@ -27,7 +27,6 @@
 
                 </template>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
-                <full-loading v-else></full-loading>
             </article>
         </section>
         <go-top :wrap="getWrap"></go-top>
@@ -35,7 +34,6 @@
 </template>
 
 <script>
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';                          // 返回顶部按钮
     import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
     import ajax from '@/config/fetch'
@@ -66,8 +64,13 @@
         name: 'myReport',
         props: ['id'],
         components: {
-            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop                           // 返回顶部按钮
+        },
+        beforeMount () {
+            this.$emit('loading', !(this.userInfo && this.report && this.feedback || this.ready));
+        },
+        updated () {
+            this.$emit('loading', !(this.userInfo && this.report && this.feedback || this.ready));
         },
         created: getData,                        // 初始化加载数据
         data () {

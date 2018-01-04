@@ -52,7 +52,6 @@
                     </li>
                 </ul>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
-                <full-loading v-else></full-loading>
             </article>
         </section>
         <loading @load="getData" :wrap="getWrap"></loading>
@@ -62,7 +61,6 @@
 
 <script>
     import Loading from '@/widget/loading';                      // 下拉加载loading
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import goTop from '@/widget/goTop';                          // 返回顶部按钮
     import getTimeStr from '@/plugins/time_format.js';           // 时间字符串插件
     import store from '@/vuex/reportList';
@@ -85,8 +83,13 @@
         mixins: [mixin],
         components: {
             'loading': Loading,                        // 下拉加载loading
-            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop                           // 返回顶部按钮
+        },
+        beforeMount () {
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
+        },
+        updated () {
+            this.$emit('loading', !(this.list && this.list.length || this.ready));
         },
         created () {
             this.$store.dispatch('init');// 初始化加载数据

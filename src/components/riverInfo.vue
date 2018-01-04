@@ -113,7 +113,6 @@
 
                 </ul>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
-                <full-loading v-else></full-loading>
             </article>
         </section>
 
@@ -161,7 +160,6 @@
 <script>
     import Vue from 'vue';
     import goTop from '@/widget/goTop';
-    import FullLoading from '@/widget/full-loading';             // loading遮罩
     import AMap from 'vue-amap';
     import ajax from '@/config/fetch'
 
@@ -188,8 +186,13 @@
         name: 'riverInfo',
         props: ['id'],
         components: {
-            'full-loading': FullLoading,               // loading遮罩
             'go-top': goTop
+        },
+        beforeMount () {
+            this.$emit('loading', !(this.data || this.ready));
+        },
+        updated () {
+            this.$emit('loading', !(this.data || this.ready));
         },
         created () {
             getDate({
