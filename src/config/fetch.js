@@ -20,7 +20,6 @@ Object.keys(url).forEach(name => {
             let xhr = ajax(Object.assign({}, {
 
                 url: url[name],                   // 请求url
-                timeout: 10000,             // 请求超时
                 dataType: 'json',              // 获取的数据类型
 
                 success (data) {

@@ -1,8 +1,8 @@
 <template>
     <div id="app" class="wrap">
         <router-view @progress="progress" @loading="loading" />
-        <full-loading v-show="showLoading"></full-loading>
-        <progress-bar :rate="rate"></progress-bar>
+        <full-loading v-show="showLoading && !showRate"></full-loading>
+        <progress-bar v-show="showRate" :rate="rate"></progress-bar>
     </div>
 </template>
 
@@ -22,6 +22,11 @@
         updated() {
             // 保存微信 code 和 appid
             this.$store.commit('appCode', this.$route.query);
+        },
+        computed: {
+            showRate () {
+                return this.rate > 0 && this.rate < 1;
+            }
         },
         methods: {
             progress (rate) {
