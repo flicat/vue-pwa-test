@@ -6,7 +6,7 @@
             <button class="btn-search text-hide pull-right" @click="showSearch=!showSearch">搜索</button>
         </div>
 
-        <component :is="tabType"></component>
+        <component :is="tabType" @loading="loading"></component>
 
         <div v-show="showSearch" class="search-form box" @click="showSearch=!showSearch">
             <div class="search-top row" @click.stop="">
@@ -98,6 +98,10 @@
             // 镇-村联动菜单
             setArea (subArea) {
                 this.$store.dispatch('setArea', subArea);
+            },
+
+            loading (isShow) {
+                this.$emit('loading', isShow);
             }
         }
     };
