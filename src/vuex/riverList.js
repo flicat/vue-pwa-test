@@ -192,37 +192,40 @@ export default new Vuex.Store({
 
         // 搜索河湖列表
         getDataNear ({commit, dispatch, state}, callback) {
+            let getRiver = function (lng, lat) {
+
+                ajax.nearbyRiver({
+                    data: {
+                        range: 10000,
+                        lng,
+                        lat
+                    }
+                }).then(data => {
+
+                    // 数据已经加载完成
+                    state.nearRiver.ready = true;
+
+                    callback && callback();
+
+                    if (data && data.data.list && data.data.list.length) {
+                        state.nearRiver.pageTotal = data.data.pageTotal;
+
+                        if (Array.isArray(state.nearRiver.list)) {
+                            state.nearRiver.list = state.nearRiver.list.concat(data.data.list);
+                        } else {
+                            state.nearRiver.list = data.data.list;
+                        }
+                    }
+                });
+            };
 
             if (!state.nearRiver.pageTotal || state.nearRiver.pageIndex <= state.nearRiver.pageTotal) {
 
-                navigator.geolocation.getCurrentPosition(function (pos) {
-                    let crd = pos.coords;
-
-                    ajax.nearbyRiver({
-                        data: {
-                            'range': 5000,
-                            'lng': '24.347783',
-                            'lat': '116.695195'
-                        }
-                    }).then(data => {
-
-                        // 数据已经加载完成
-                        state.nearRiver.ready = true;
-
-                        callback && callback();
-
-                        if (data && data.data.list && data.data.list.length) {
-                            state.nearRiver.pageTotal = data.data.pageTotal;
-
-                            if (Array.isArray(state.nearRiver.list)) {
-                                state.nearRiver.list = state.nearRiver.list.concat(data.data.list);
-                            } else {
-                                state.nearRiver.list = data.data.list;
-                            }
-                        }
-                    });
-
-                }, function () {}, {
+                navigator.geolocation.getCurrentPosition(function ({coords: {longitude, latitude}}) {
+                    getRiver(longitude, latitude);
+                }, function () {
+                    getRiver(116.695195, 24.347783);
+                }, {
                     enableHighAccuracy: true,
                     timeout: 5000,
                     maximumAge: 0

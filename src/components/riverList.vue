@@ -106,6 +106,10 @@
 <style lang="less" scoped>
     @import "../assets/css/base.less";
 
+    .box {
+        -webkit-box-pack: start;
+        box-pack: start;
+    }
     .top-menu {
         position: relative;
         z-index: 10;

@@ -17,10 +17,7 @@
             'progress-bar': progressBar                    // 全局进度条
         },
         data () {
-            return {
-                rate: 0,
-                showLoading: this.$store.state.showLoading
-            };
+            return this.$store.state;
         },
         updated() {
             // 保存微信 code 和 appid
@@ -28,7 +25,7 @@
         },
         methods: {
             progress (rate) {
-                this.rate = rate;
+                this.$store.commit('rate', rate);
             },
             loading (isShow) {
                 this.$store.commit('loading', isShow);
