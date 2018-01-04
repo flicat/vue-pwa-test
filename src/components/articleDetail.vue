@@ -29,6 +29,8 @@
 
             ajax.articleDetail({
                 data: {
+                    code: this.$store.state.code,
+                    appid: this.$store.state.appid,
                     articleId: this.id
                 }
             }).then(data => {

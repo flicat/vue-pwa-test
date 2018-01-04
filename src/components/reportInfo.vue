@@ -45,7 +45,9 @@
 
         ajax.reportInfo({
             data: {
-                'id': this.id
+                code: this.$store.state.code,
+                appid: this.$store.state.appid,
+                id: this.id
             }
         }).then(data => {
             // 数据已经加载完成

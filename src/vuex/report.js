@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ajax from '@/config/fetch'
+import Global from './index'
 
 Vue.use(Vuex);
 
@@ -25,7 +26,12 @@ export default new Vuex.Store({
         // 获取治水大类联动菜单
         getFloodType ({commit, dispatch, state}) {
 
-            ajax.floodLinkage().then(data => {
+            ajax.floodLinkage({
+                data: {
+                    code: state.Global.code,
+                    appid: state.Global.appid
+                }
+            }).then(data => {
                 // 数据已经加载完成
                 state.ready = true;
 
@@ -75,6 +81,11 @@ export default new Vuex.Store({
 
         }
 
+    },
+
+    modules: {
+        Global
     }
+
 
 });

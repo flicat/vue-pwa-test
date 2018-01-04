@@ -38,9 +38,11 @@
 
             ajax.articleList({
                 data: {
-                    'columnId': this.id,
-                    'pageIndex': this.pageIndex++,
-                    'pageSize': this.pageSize
+                    code: this.$store.state.code,
+                    appid: this.$store.state.appid,
+                    columnId: this.id,
+                    pageIndex: this.pageIndex++,
+                    pageSize: this.pageSize
                 }
             }).then(data => {
                 // 数据已经加载完成

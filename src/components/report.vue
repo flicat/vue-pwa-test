@@ -330,6 +330,9 @@
 
                     let data = new FormData();
 
+                    data.append('code', that.$store.state.Global.code);
+                    data.append('appid', that.$store.state.Global.appid);
+
                     data.append('id', that.id);
                     data.append('location', that.location);
                     data.append('location_info', that.location_info);

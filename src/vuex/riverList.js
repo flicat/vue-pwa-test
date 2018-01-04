@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ajax from '@/config/fetch'
+import Global from './index'
 
 Vue.use(Vuex);
 
@@ -72,7 +73,12 @@ export default new Vuex.Store({
 
         // 获取地区联动菜单
         getArea({commit, dispatch, state}) {
-            ajax.areaLinkage().then(data => {
+            ajax.areaLinkage({
+                data: {
+                    code: state.Global.code,
+                    appid: state.Global.appid
+                }
+            }).then(data => {
                 state.ready = true;
 
                 if (data && data.data) {
@@ -151,11 +157,13 @@ export default new Vuex.Store({
 
                 ajax.riverList({
                     data: {
-                        'name': state.searchParam.name,
-                        'town': state.searchParam.town,
-                        'village': state.searchParam.village,
-                        'pageIndex': state.allRiver.pageIndex++,
-                        'pageSize': state.allRiver.pageSize,
+                        code: state.Global.code,
+                        appid: state.Global.appid,
+                        name: state.searchParam.name,
+                        town: state.searchParam.town,
+                        village: state.searchParam.village,
+                        pageIndex: state.allRiver.pageIndex++,
+                        pageSize: state.allRiver.pageSize,
                     }
                 }).then(data => {
                     // 数据已经加载完成
@@ -191,11 +199,13 @@ export default new Vuex.Store({
         },
 
         // 搜索河湖列表
-        getDataNear ({commit, dispatch, state}, callback) {
+        getDataNear({commit, dispatch, state}, callback) {
             let getRiver = function (lng, lat) {
 
                 ajax.nearbyRiver({
                     data: {
+                        code: state.Global.code,
+                        appid: state.Global.appid,
                         range: 10000,
                         lng,
                         lat
@@ -239,5 +249,9 @@ export default new Vuex.Store({
 
         }
 
+    },
+
+    modules: {
+        Global
     }
 });

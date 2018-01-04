@@ -60,8 +60,10 @@
 
                 ajax.follow({
                     data: {
-                        'follow': follow,
-                        'id': river.id
+                        code: this.$store.state.Global.code,
+                        appid: this.$store.state.Global.appid,
+                        follow: follow,
+                        id: river.id
                     }
                 }).then(data => {
                     if (data) {

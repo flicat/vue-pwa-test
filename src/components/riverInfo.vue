@@ -177,12 +177,10 @@
 
 
     // 获取数据
-    function getDate (id) {
+    function getDate (data) {
         // 获取数据
         return ajax.riverInfo({
-            data: {
-                id
-            }
+            data,
         });
     }
 
@@ -194,7 +192,11 @@
             'go-top': goTop
         },
         created () {
-            getDate(this.id).then(data => {
+            getDate({
+                code: this.$store.state.code,
+                appid: this.$store.state.appid,
+                id: this.id
+            }).then(data => {
                 // 数据已经加载完成
                 this.ready = true;
 
@@ -261,7 +263,11 @@
                 this.showSearch = false;
                 this.$router.replace({name: 'riverInfo', params: {id: this.data.supRiverId}});
 
-                getDate(this.data.supRiverId).then(data => {
+                getDate({
+                    code: this.$store.state.code,
+                    appid: this.$store.state.appid,
+                    id: this.data.supRiverId
+                }).then(data => {
                     if (data) {
                         this.data = data.data;
                     }

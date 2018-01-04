@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ajax from '@/config/fetch'
+import Global from './index'
 
 Vue.use(Vuex);
 
@@ -70,7 +71,12 @@ export default new Vuex.Store({
         // 获取地区联动菜单
         getArea ({commit, dispatch, state}) {
 
-            ajax.areaLinkage().then(data => {
+            ajax.areaLinkage({
+                data: {
+                    code: state.Global.code,
+                    appid: state.Global.appid
+                }
+            }).then(data => {
                 if(data && data.data) {
 
                     let list = data.data;
@@ -123,6 +129,8 @@ export default new Vuex.Store({
 
                 ajax.riverList({
                     data: {
+                        code: state.Global.code,
+                        appid: state.Global.appid,
                         name: state.searchParam.name,
                         town: state.searchParam.town,
                         village: state.searchParam.village,
@@ -154,6 +162,10 @@ export default new Vuex.Store({
 
         }
 
+    },
+
+    modules: {
+        Global
     }
 
 });
