@@ -31,7 +31,7 @@ Object.keys(url).forEach(name => {
                 },
 
                 error () {
-                    reject('接口错误：\n' + url[name]);
+                    console.error('接口错误：\n' + url[name]);
                 },
 
                 complete () {

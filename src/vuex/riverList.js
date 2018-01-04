@@ -164,7 +164,7 @@ export default new Vuex.Store({
                         town: state.searchParam.town,
                         village: state.searchParam.village,
                         pageIndex: state.allRiver.pageIndex++,
-                        pageSize: state.allRiver.pageSize,
+                        pageSize: state.allRiver.pageSize
                     }
                 }).then(data => {
                     // 数据已经加载完成
@@ -208,6 +208,8 @@ export default new Vuex.Store({
                         code: state.Global.code,
                         appid: state.Global.appid,
                         range: 10000,
+                        pageIndex: state.nearRiver.pageIndex++,
+                        pageSize: state.nearRiver.pageSize,
                         lng,
                         lat
                     }

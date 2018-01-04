@@ -12,8 +12,8 @@ export default {
     articleDetail: domain + '/cmsArticleController.do?cmsArticleDetail',            // 文章详情 done
     articleList:   domain + '/cmsArticleController.do?cmsArticleList',              // 文章列表 done
     floodLinkage:  domain + '/weixinNearBaoliaoController.do?getDealInfos',         // 治水大类联动菜单
-    follow:        'http://192.168.199.248:2001/data/follow-result.json',           // 关注河湖
-    nearbyRiver:   domain + 'hehumingluController.do?getNearRivers',                // 附近河湖
+    follow:        domain + '/weixinNearBaoliaoController.do?doAddAttention',           // 关注河湖
+    nearbyRiver:   domain + '/hehumingluController.do?getNearRivers',                // 附近河湖
     reportInfo:    domain + '/weixinExposureInfoController.do?baoliaoDetail',       // 曝光详情 done
     reportList:    domain + '/weixinExposureInfoController.do?baoliaoList',         // 曝光台列表 / 我的曝光列表 done
     mapReview:     domain + '/weixinNearBaoliaoController.do?mapNearBaoliao',       // 地图预览 done
