@@ -14,8 +14,8 @@ export default new Vuex.Store({
         rate: 0,                                     // 全局下载/上传进度条
         showLoading: false,                          // 页面切换全局loading
 
-        code: localStorage['code'],                  // 微信公众号 code
-        appid: localStorage['appid']                 // 微信公众号 appid
+        code: localStorage['code'] || '',                  // 微信公众号 code
+        appid: localStorage['appid'] || ''                 // 微信公众号 appid
     },
     mutations: {
         rate (state, rate) {

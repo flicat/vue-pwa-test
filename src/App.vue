@@ -19,9 +19,27 @@
         data () {
             return this.$store.state;
         },
-        updated() {
-            // 保存微信 code 和 appid
-            this.$store.commit('appCode', this.$route.query);
+        created () {
+            let query = {};
+
+            let hash = location.href.split('#')[1];
+
+            if(hash) {
+                let search = hash.split('?')[1];
+
+                if(search) {
+                    search.split('&').forEach(item => {
+                        let index = item.indexOf('=');
+                        if(index > 0) {
+                            query[item.substr(0, index)] = decodeURIComponent(item.substr(index + 1));
+                        }
+                    });
+
+                }
+            }
+
+            this.$store.commit('appCode', query);
+
         },
         computed: {
             showRate () {
