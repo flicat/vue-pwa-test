@@ -7,11 +7,11 @@
                         <img :src="river.thumb" @error="$event.target.src=require('../assets/images/default.png')" alt="" class="thumb">
                         <p class="name">{{river.name}}</p>
                         <div class="label-wrap clear">
-                            <span class="label area">{{river.area}}</span>
-                            <span class="label length">{{river.length}}</span>
-                            <span class="label decs">{{river.decs}}</span>
-                            <span class="label from">起点：{{river.from}}</span>
-                            <span class="label end">终点：{{river.end}}</span>
+                            <span v-if="river.area" class="label area">{{river.area}}</span>
+                            <span v-if="river.length" class="label length">{{river.length}}Km</span>
+                            <span v-if="river.decs" class="label decs">{{river.decs}}</span>
+                            <span v-if="river.from" class="label from">起点：{{river.from}}</span>
+                            <span v-if="river.end" class="label end">终点：{{river.end}}</span>
                         </div>
                     </router-link>
                     <a href="javascript:;" class="btn-follow text-hide" @click="follow(river)"
@@ -63,7 +63,7 @@
                         code: this.$store.state.Global.code,
                         appid: this.$store.state.Global.appid,
                         follow: follow,
-                        id: river.id
+                        river_id: river.id
                     }
                 }).then(data => {
                     if (data) {
