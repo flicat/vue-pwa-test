@@ -54,6 +54,7 @@ router.beforeEach((to, from, next) => {
     for(let xhr of requestList){
         xhr.abort();
     }
+    requestList.clear();
     next();
 });
 
