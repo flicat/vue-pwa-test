@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from '@/vuex';
+import sw from '@/config/serviceWorker';
 
 Vue.config.productionTip = false;
 
@@ -13,6 +14,7 @@ let VM = new Vue({
     el: '#app',
     store,
     router,
+    beforeCreate: sw,
     template: '<App/>',
     components: {App}
 });
