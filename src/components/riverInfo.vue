@@ -146,7 +146,7 @@
                     :zoom="zoom"
                     :plugin="plugin"
                     class="flex-content">
-                    <el-amap-marker :position="marker.position" :content="marker.content"></el-amap-marker>
+                    <el-amap-polyline :editable="false" :strokeWeight=" 8 - data.level * 2" :path="polylinePath" strokeColor="#0066ff" lineJoin="round"></el-amap-polyline>
                 </el-amap>
                 <button class="btn-close-map" @click="showMap=!showMap">&times;</button>
             </div>
@@ -226,7 +226,13 @@
                     events: {
                         init(instance) {}
                     }
-                }]
+                }],
+
+                // 河流区域描绘
+                polyline: {
+                    path: [[121.5389385, 31.21515044], [121.5389385, 31.29615044], [121.5273285, 31.21515044]],
+                    editable: false
+                }
             };
         },
         computed: {
@@ -238,15 +244,11 @@
                     return [0, 0];
                 }
             },
-            // 河流坐标点
-            marker () {
-                if(this.data && this.data.latitude && this.data.longitude) {
-                    return {
-                        position: [this.data.longitude, this.data.latitude],
-                        content: '<span class="river-point"></span>'
-                    }
+            polylinePath () {
+                if(this.data && this.data.coordinates && this.data.coordinates.length) {
+                    return this.data.coordinates;
                 } else {
-                    return {};
+                    return [];
                 }
             },
             // 河流等级
