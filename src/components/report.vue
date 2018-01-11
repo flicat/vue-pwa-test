@@ -85,8 +85,13 @@
                     <span class="error-msg col-12" v-if="invalid === 'picture'">请至少上传一张照片！</span>
                 </div>
                 <div class="form-group row" v-if="picList.length">
-                    <div class="form-control img-control col-3" v-for="src in picList">
-                        <img :src="src" alt="" @load="revoke(src)">
+                    <div class="form-control col-3"
+                         v-for="pic in picList"
+                         :key="pic.src"
+                         @click="picReview(pic.src)"
+                         :class="[currentPic === pic.src ? 'current-pic box' : 'img-control']">
+                        <img :src="pic.src" alt="" @load="revoke(pic.src)">
+                        <i class="icon-delete" @click="delPic(pic.md5)"></i>
                     </div>
                 </div>
 
@@ -145,6 +150,8 @@
                     // 将文件传递给回调函数
                     data.value(this.files);
                 }
+
+                this.value = '';
             });
         }
     });
@@ -163,22 +170,23 @@
             let that = this;
 
             return {
-                invalid: null,             // 验证失败的字段
-                showMap: false,            // 地图显隐字段
-                showRiver: false,          // 河流列表显隐字段
+                invalid: null,              // 验证失败的字段
+                showMap: false,             // 地图显隐字段
+                showRiver: false,           // 河流列表显隐字段
 
-                id: null,               // 投诉河道ID
-                riverName: null,        // 河道名称
-                address: null,          // 位置信息
-                location: null,         // 举报位置经纬度
-                location_info: null,    // 举报位置描述
-                reporter: null,         // 举报人
-                phone: null,            // 举报电话
-                floodType: null,        // 治水大类ID
-                floodSubType: null,     // 治水子类ID
-                description: null,      // 问题描述
-                picture: new Map(),            // 照片集
-                picList: [],            // 照片预览
+                id: null,                   // 投诉河道ID
+                riverName: null,            // 河道名称
+                address: null,              // 位置信息
+                location: null,             // 举报位置经纬度
+                location_info: null,        // 举报位置描述
+                reporter: null,             // 举报人
+                phone: null,                // 举报电话
+                floodType: null,            // 治水大类ID
+                floodSubType: null,         // 治水子类ID
+                description: null,          // 问题描述
+                picture: new Map(),         // 照片集
+                picList: [],                // 照片预览
+                currentPic: null,           // 当前预览照片
 
                 amapManager: new AMap.AMapManager(),
                 zoom: 12,
@@ -271,6 +279,7 @@
                 }
 
             },
+
             // 上传图片文件
             getFile(files) {
                 let that = this;
@@ -289,12 +298,16 @@
                                     quality: 0.8,
                                     fieldName: MD5
                                 }).then(result => {
-
-                                    that.picture.set(MD5, result.file);
+                                    let newFile = new File([result.file], result.origin.name, { type: result.origin.type});
+                                    that.picture.set(MD5, newFile);
 
                                     // 读取图片预览
-                                    that.picList.push((URL || webkitURL).createObjectURL(new Blob([result.file])));
-                                });
+                                    that.picList.push({
+                                        src: (URL || webkitURL).createObjectURL(newFile),
+                                        md5: MD5
+                                    });
+
+                                }).catch(e => console.error(e));
 
                             }
                         });
@@ -308,9 +321,23 @@
                 this.id = river.id;
                 this.riverName = river.name;
             },
+
             // 释放图片内存
             revoke(src) {
                 (URL || webkitURL).revokeObjectURL(src);
+            },
+            // 大图预览图片
+            picReview (src) {
+                if(this.currentPic === src) {
+                    this.currentPic = null;
+                } else {
+                    this.currentPic = src;
+                }
+            },
+            // 删除图片
+            delPic (md5) {
+                this.picture.delete(md5);
+                this.picList = this.picList.filter(pic => pic.md5 !== md5);
             },
 
             // 校验表单是否通过验证
@@ -431,6 +458,30 @@
                 img {
                     width: 100%;
                     height: 3em;
+                }
+            }
+
+            &.current-pic {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                text-align: center;
+                background-color: rgba(0,0,0,0.5);
+
+                img {
+                    width: 80%;
+                    height: auto;
+                    vertical-align: top;
+                }
+                .icon-delete {
+                    display: inline-block;
+                    width: 80%;
+                    height: 2rem;
+                    background: url(../assets/images/icon-delete.png) no-repeat 50% 50% #eee;
+                    background-size: auto 70%;
                 }
             }
 
