@@ -124,6 +124,7 @@
     import AMap from 'vue-amap';
     import store from '@/vuex/report';
     import ajax from '@/config/fetch';
+    import imagemin from 'lrz';
 
     Vue.use(AMap);
 
@@ -278,14 +279,21 @@
                     // 使用MD5文件去重
                     browserMd5File(file, (err, MD5) => {
                         if (!that.picture.has(MD5)) {
-                            that.picture.set(MD5, file);
 
-                            // 读取图片预览
-                            let reader = new FileReader();
-                            reader.onload = function () {
-                                that.picList.push((URL || webkitURL).createObjectURL(new Blob([reader.result])));
-                            };
-                            reader.readAsArrayBuffer(file);
+                            // 图片压缩
+                            imagemin(file, {
+                                width: 750,
+                                height: 750,
+                                quality: 0.8,
+                                fieldName: MD5
+                            }).then(result => {
+
+                                that.picture.set(MD5, result.file);
+
+                                // 读取图片预览
+                                that.picList.push((URL || webkitURL).createObjectURL(new Blob([result.file])));
+                            });
+
                         }
                     });
                 });
