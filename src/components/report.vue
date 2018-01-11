@@ -291,6 +291,8 @@
                         browserMd5File(file, (err, MD5) => {
                             if (!that.picture.has(MD5)) {
 
+                                that.$emit('loading', true);
+
                                 // 图片压缩
                                 imagemin(file, {
                                     width: 750,
@@ -307,7 +309,9 @@
                                         md5: MD5
                                     });
 
-                                }).catch(e => console.error(e));
+                                })
+                                .catch(e => console.error(e))
+                                .always(() => that.$emit('loading', false));
 
                             }
                         });
@@ -462,6 +466,7 @@
             }
 
             &.current-pic {
+                font-size: 0;
                 position: fixed;
                 left: 0;
                 top: 0;
@@ -474,6 +479,7 @@
                 img {
                     width: 80%;
                     height: auto;
+                    max-height: 80%;
                     vertical-align: top;
                 }
                 .icon-delete {
@@ -482,6 +488,7 @@
                     height: 2rem;
                     background: url(../assets/images/icon-delete.png) no-repeat 50% 50% #eee;
                     background-size: auto 70%;
+                    vertical-align: top;
                 }
             }
 
