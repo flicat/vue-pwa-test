@@ -276,26 +276,30 @@
                 let that = this;
 
                 [...files].forEach(file => {
-                    // 使用MD5文件去重
-                    browserMd5File(file, (err, MD5) => {
-                        if (!that.picture.has(MD5)) {
+                    if(/^image/.test(file.type)) {
 
-                            // 图片压缩
-                            imagemin(file, {
-                                width: 750,
-                                height: 750,
-                                quality: 0.8,
-                                fieldName: MD5
-                            }).then(result => {
+                        // 使用MD5文件去重
+                        browserMd5File(file, (err, MD5) => {
+                            if (!that.picture.has(MD5)) {
 
-                                that.picture.set(MD5, result.file);
+                                // 图片压缩
+                                imagemin(file, {
+                                    width: 750,
+                                    height: 750,
+                                    quality: 0.8,
+                                    fieldName: MD5
+                                }).then(result => {
 
-                                // 读取图片预览
-                                that.picList.push((URL || webkitURL).createObjectURL(new Blob([result.file])));
-                            });
+                                    that.picture.set(MD5, result.file);
 
-                        }
-                    });
+                                    // 读取图片预览
+                                    that.picList.push((URL || webkitURL).createObjectURL(new Blob([result.file])));
+                                });
+
+                            }
+                        });
+
+                    }
                 });
             },
             // 选中河流
