@@ -7,11 +7,11 @@
                         <img :src="river.thumb" alt="" @error="$event.target.src=require('../assets/images/default.png')" class="thumb">
                         <p class="name">{{river.name}}</p>
                         <div class="label-wrap clear">
-                            <span v-if="river.area" class="label area">{{river.area}}</span>
-                            <span v-if="river.length" class="label length">{{river.length}}Km</span>
-                            <span v-if="river.decs" class="label decs">{{river.decs}}</span>
-                            <span v-if="river.from" class="label from">起点：{{river.from}}</span>
-                            <span v-if="river.end" class="label end">终点：{{river.end}}</span>
+                            <span v-if="river.area" class="label text-clip-2 area">{{river.area}}</span>
+                            <span v-if="river.length" class="label text-clip-2 length">{{river.length}}Km</span>
+                            <span v-if="river.decs" class="label text-clip-2 decs">{{river.decs}}</span>
+                            <span v-if="river.from" class="label text-clip-2 from">起点：{{river.from}}</span>
+                            <span v-if="river.end" class="label text-clip-2 end">终点：{{river.end}}</span>
                         </div>
                     </router-link>
                     <a href="javascript:;" class="btn-follow text-hide" @click="follow(river)"
@@ -89,7 +89,7 @@
             position: relative;
             padding: (30 / @rem) 0 (30 / @rem) (168 / @rem);
             border-bottom: 1px solid #e5e5e7;
-            height: (138 / @rem);
+            //height: (138 / @rem);
             overflow: hidden;
 
             &:last-child {
@@ -119,8 +119,8 @@
             .label-wrap .label {
                 float: left;
                 font-size: (28 / @rem);
-                height: (40 / @rem);
                 line-height: (40 / @rem);
+                max-width: 100%;
                 padding: 0 0.3em;
                 background-color: #eee;
                 border-radius: 4px;
