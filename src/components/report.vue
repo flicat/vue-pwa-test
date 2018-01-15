@@ -8,8 +8,9 @@
                     <div class="form-control select-control col-8">
                         <p class="label">{{riverName || '请选择（必填）'}}</p>
                         <button class="btn-map" @click="showRiver=!showRiver"></button>
+                        <input type="hidden" :value="id" v-validate.require="validate('id')">
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'id'">请选择投诉河道！</span>
+                    <span class="error-msg col-12" v-if="!id && invalid['id']">请选择投诉河道！</span>
                 </div>
 
                 <div class="form-group row">
@@ -17,72 +18,76 @@
                     <div class="form-control map-control col-8">
                         <p class="output text-clip">{{address}}</p>
                         <button class="btn-map" @click="openMap"></button>
+                        <input type="hidden" :value="location" v-validate.require="validate('location')">
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'location'">请选择举报位置！</span>
+                    <span class="error-msg col-12" v-if="!location && invalid['location']">请选择举报位置！</span>
                 </div>
 
                 <div class="form-group row">
                     <div class="form-control col-12">
                         <textarea placeholder="请您具体填写一下报料的位置，如某大厦正南方100米，以便工作人员找到问题。"
-                                  v-model="location_info" name="location_info"></textarea>
+                                  v-model="location_info" name="location_info" v-validate.require="validate('location_info')"></textarea>
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'location_info'">请您具体填写一下报料的位置！</span>
+                    <span class="error-msg col-12" v-if="invalid['location_info']">请您具体填写一下报料的位置！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">举报人</label>
                     <div class="form-control col-8">
-                        <input type="text" name="user" v-model="reporter">
+                        <input type="text" name="user" v-model="reporter" v-validate.require.cn="validate('reporter')">
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'reporter'">请填写举报人！</span>
+                    <span class="error-msg col-12" v-if="invalid['reporter'] === 'require'">举报人不能为空！</span>
+                    <span class="error-msg col-12" v-if="invalid['reporter'] === 'cn'">请填写正确的名字！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">举报电话</label>
                     <div class="form-control col-8">
-                        <input type="text" name="user" v-model="phone">
+                        <input type="text" name="user" v-model="phone" v-validate.require.phone|tell="validate('phone')">
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'phone'">请填写举报电话！</span>
+                    <span class="error-msg col-12" v-if="invalid['phone'] === 'require'">请填写举报电话！</span>
+                    <span class="error-msg col-12" v-if="invalid['phone'] === 'phone|tell'">请填写正确的电话号码！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">治水大类</label>
                     <div class="form-control select-control col-8">
                         <p class="label">{{flood && floodType ? flood[floodType].name : '请选择（必填）'}}</p>
-                        <select name="river" v-model="floodType">
+                        <select name="river" v-model="floodType" v-validate.require="validate('floodType')">
                             <option value="" disabled>请选择</option>
                             <option v-for="id in floodList" :value="id">{{flood[id].name}}</option>
                         </select>
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'floodType'">请选择治水大类！</span>
+                    <span class="error-msg col-12" v-if="invalid['floodType']">请选择治水大类！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">治水子类</label>
                     <div class="form-control select-control col-8">
                         <p class="label">{{subFlood && floodSubType && subFlood[floodSubType]? subFlood[floodSubType].name : '请选择（必填）'}}</p>
-                        <select name="river" v-model="floodSubType">
+                        <select name="river" v-model="floodSubType" v-validate.require="validate('floodSubType')">
                             <option value="" disabled>请选择</option>
                             <option v-for="id in subFloodList" :value="id">{{subFlood[id].name}}</option>
                         </select>
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'floodSubType'">请选择治水子类！</span>
+                    <span class="error-msg col-12" v-if="invalid['floodSubType']">请选择治水子类！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">问题描述</label>
                     <div class="form-control col-8">
-                        <textarea placeholder="请输入问题内容" v-model="description"></textarea>
+                        <textarea placeholder="请输入问题内容" v-model="description" v-validate.require="validate('description')"></textarea>
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'description'">请填写问题描述！</span>
+                    <span class="error-msg col-12" v-if="invalid['description']">请填写问题描述！</span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-4 control-label">照片集</label>
                     <div class="form-control file-control col-8">
                         <input type="file" v-file="getFile" multiple accept="image/*">
+                        <input type="hidden" :value="!!picture.size ? picture.size : ''" v-validate.require="validate('picture')">
                     </div>
-                    <span class="error-msg col-12" v-if="invalid === 'picture'">请至少上传一张照片！</span>
+                    <span class="error-msg col-12" v-if="!picture.size && invalid['picture']">请至少上传一张照片！</span>
                 </div>
                 <div class="form-group row" v-if="picList.length">
                     <div class="form-control col-3"
@@ -130,8 +135,12 @@
     import store from '@/vuex/report';
     import ajax from '@/config/fetch';
     import imagemin from 'lrz';
+    import fileInput from '../plugins/vue-file';
+    import validate, {check} from '../plugins/vue-validate';
 
     Vue.use(AMap);
+    Vue.use(fileInput);
+    Vue.use(validate);
 
     // 初始化vue-amap
     AMap.initAMapApiLoader({
@@ -139,21 +148,6 @@
         key: 'db51a24a68281139bf38be69e9875b8f',
         // 插件集合
         plugin: ['AMap.ToolBar']
-    });
-
-
-    // 自定义文件上传指令
-    Vue.directive('file', {
-        bind: function (el, data) {
-            el.addEventListener('change', function () {
-                if (this.files && typeof data.value === 'function') {
-                    // 将文件传递给回调函数
-                    data.value(this.files);
-                }
-
-                this.value = '';
-            });
-        }
     });
 
 
@@ -170,7 +164,7 @@
             let that = this;
 
             return {
-                invalid: null,              // 验证失败的字段
+                invalid: {},                // 验证失败的字段
                 showMap: false,             // 地图显隐字段
                 showRiver: false,           // 河流列表显隐字段
 
@@ -285,7 +279,7 @@
                 let that = this;
 
                 [...files].forEach(file => {
-                    if(/^image/.test(file.type)) {
+                    if(/^image/.test(file.type) || /\.(jpe?g|png|gif|bmp)$/.test(file.name)) {
 
                         // 使用MD5文件去重
                         browserMd5File(file, (err, MD5) => {
@@ -345,29 +339,22 @@
             },
 
             // 校验表单是否通过验证
-            validate () {
-                let field = {
-                    id: this.id,
-                    location: this.location,
-                    location_info: this.location_info,
-                    reporter: this.reporter,
-                    phone: this.phone,
-                    floodType: this.floodType,
-                    floodSubType: this.floodSubType,
-                    description: this.description,
-                    picture: this.picture.size
+            validate (key) {
+                return (result, rule, el) => {
+                    if(!result) {
+                        Vue.set(this.invalid, key, rule);
+                    } else {
+                        Vue.set(this.invalid, key, undefined);
+                    }
                 };
-
-                this.invalid = Object.keys(field).find(name => !field[name]);
-
-                return !this.invalid;
             },
 
             // 点击提交爆料
             submit() {
                 let that = this;
 
-                if(that.validate()) {
+                // 检测所有表单
+                if(check()) {
 
                     let data = new FormData();
 

@@ -90,7 +90,7 @@
                     <li class="river-item">
                         <i class="icon icon-collecting-area"></i>
                         <span class="label">河流集雨面积：</span>
-                        <em class="text">{{data.rainArea || '-'}}㎡</em>
+                        <em class="text">{{data.rainArea ? data.rainArea + 'Km²' : '-'}}</em>
                     </li>
 
                     <li class="river-item">
@@ -105,11 +105,11 @@
                         <!--<em class="text">{{data.system || '-'}}</em>-->
                     <!--</li>-->
 
-                    <!--<li class="river-item">-->
-                        <!--<i class="icon icon-river-remarks"></i>-->
-                        <!--<span class="label">备注：</span>-->
-                        <!--<em class="text">{{data.remarks || '-'}}</em>-->
-                    <!--</li>-->
+                    <li class="river-item">
+                        <i class="icon icon-river-remarks"></i>
+                        <span class="label">备注：</span>
+                        <em class="text">{{data.info || '-'}}</em>
+                    </li>
 
                 </ul>
                 <div class="box" v-else-if="ready"><span>暂无数据</span></div>
