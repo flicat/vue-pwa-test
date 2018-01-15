@@ -17,7 +17,7 @@
         <router-link to="/report-list">
             <span class="icon-outlet">
                 <i class="icon icon-location"></i>
-                <em>排污口</em>
+                <em>曝光台</em>
             </span>
         </router-link>
     </div>
@@ -40,7 +40,7 @@
 
     let amapManager = new AMap.AMapManager();
 
-    // 获取坐标点
+    // 获取曝光点
     function getData() {
         let that = this;
 
@@ -48,11 +48,11 @@
 
         ajax.mapReview({
             data: {
-                code: this.$store.state.code,
-                appid: this.$store.state.appid,
+                code: that.$store.state.code,
+                appid: that.$store.state.appid,
                 longitude: that.center[0],
                 latitude: that.center[1],
-                distance: 1000
+                distance: that.distance
             }
         }).then(data => {
 
@@ -74,32 +74,35 @@
 
     }
 
+    // 获取地图中心点与范围
+    function getBounds () {
+        if (this.$refs.map) {
+
+            // 计算地图直径范围
+            let bounds = this.$refs.map.$amap.getBounds();
+            let lnglat = new window.AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
+
+            this.center = this.$refs.map.$$getCenter();
+            this.distance = Math.floor(lnglat.distance([bounds.southwest.lng, bounds.southwest.lat]));
+            getData.bind(this)();
+        }
+    }
+
     export default {
         name: 'mapInfo',
-
-        created: getData,
-
         data: function () {
 
             return {
                 markers: [],
 
                 amapManager,
-                zoom: 12,
-                center: [112.865569, 23.951898],
+                zoom: 14,
+                center: [116.695195, 24.347782],
+                distance: 1000,
                 events: {
-                    moveend: (e) => {
-                        if (this.$refs.map) {
-                            this.center = this.$refs.map.$$getCenter();
-                            getData.bind(this)();
-                        }
-                    },
-                    zoomchange: (e) => {
-                        if (this.$refs.map) {
-                            this.center = this.$refs.map.$$getCenter();
-                            getData.bind(this)();
-                        }
-                    }
+                    init: getBounds.bind(this),
+                    moveend: getBounds.bind(this),
+                    zoomchange: getBounds.bind(this)
                 },
                 plugin: [
                     {
