@@ -120,7 +120,7 @@ validate.install = function (Vue, options) {
 
         unbind(el) {
             if (handler) {
-                el.removeEventListener(handler);
+                el.removeEventListener(option.event, handler);
                 validateNodeList.delete(el);
             }
         }

@@ -28,7 +28,7 @@ fileDirective.install = function (Vue, option) {
         },
 
         unbind (el) {
-            el.removeEventListener(fileHandler)
+            el.removeEventListener('change', fileHandler)
         }
     });
 };
