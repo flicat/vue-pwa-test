@@ -9,7 +9,7 @@
                 :plugin="plugin"
                 :events="events"
                 class="flex-content">
-                <el-amap-marker v-for="marker in markers" :key="marker.position" :position="marker.position" :content="marker.content"
+                <el-amap-marker v-for="marker in markers" :position="marker.position" :content="marker.content"
                                 :events="marker.events"></el-amap-marker>
             </el-amap>
         </section>
